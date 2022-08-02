@@ -15,8 +15,8 @@ import { Socket } from 'dgram';
     allowEIO3: true
   })
 export class SocketsGateway {
-  @WebSocketServer()
-  server;
+  // @WebSocketServer()
+  // server;
   
   @SubscribeMessage('ezequiel')
   async elTesteo(@MessageBody() params, @ConnectedSocket() client: Socket) {
@@ -30,6 +30,18 @@ export class SocketsGateway {
     if (params != undefined) {
       if (params.arrayTickets != undefined && params.arrayTickets != null && params.parametros != undefined && params.parametros != null) {
         ticketsInstance.insertarTickets(params.arrayTickets, params.parametros, client);
+      } else {
+        client.emit('resSincroTickets', { error: true, mensaje:  'SanPedro: arrayTickets o parametros indefinidos o null'});
+      }
+    } else {
+      client.emit('resSincroTickets', { error: true, mensaje:  'SanPedro: Error en sockets > sincroTickets. ¡Faltan datos!'});
+    }
+  }
+  @SubscribeMessage('sincroTicketsNueva')
+  async sincronizarTicketsNueva(@MessageBody() params, @ConnectedSocket() client: Socket) {
+    if (params != undefined) {
+      if (params.arrayTickets != undefined && params.arrayTickets != null && params.parametros != undefined && params.parametros != null) {
+        ticketsInstance.insertarTicketsNueva(params.arrayTickets, params.parametros, client);
       } else {
         client.emit('resSincroTickets', { error: true, mensaje:  'SanPedro: arrayTickets o parametros indefinidos o null'});
       }
