@@ -10,8 +10,6 @@ export class TeclasClass {
     getTeclas(database: string, licencia: number) {
         return recHit(database, `SELECT Data, Ambient as nomMenu, (select EsSumable from articles where codi = article) as esSumable, (select nom from articles where codi = article) as nombreArticulo, article as idArticle, pos, color FROM TeclatsTpv WHERE Llicencia = ${licencia} AND Data = (select MAX(Data) FROM TeclatsTpv WHERE Llicencia = ${licencia} )`).then(async (res: IResult<any>) => {
             if (res) {
-                
-               console.log(res.recordset)
               let nombremenus =  await this.getnombreMenu(database, licencia);
               //console.log(nombremenus)
                 if (res.recordset.length > 0) {
