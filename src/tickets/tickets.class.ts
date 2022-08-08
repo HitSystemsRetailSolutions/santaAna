@@ -129,6 +129,7 @@ class TicketsClass {
         if (ticket.cliente !== undefined && ticket.cliente != "" && ticket.cliente !== null) {
             campoOtros += `[Id:${ticket.cliente}]`;
         }
+        return campoOtros;
     }
 
     /* Eliminar esta función cuando todos los tocs estén actualizados. Utilizar insertarTicketsNueva */
@@ -482,17 +483,18 @@ class TicketsClass {
                                         END`;
                         const res2 = await recHit('Hit', sql2);
                         ticket.enviado = true;
+                        client.emit("resSincroTickets", { error: false, ticket });
                     } else {
                         ticket.comentario = "Respuesta SQL incontrolada";
                         throw Error("Error, caso incontrolado. Respuesta desconocida: ticket: " + ticket);
                     }
                 } else {
-                    ticket.comentario = 'Caso no controlado de repuesta SQL';
+                    ticket.comentario = "Caso no controlado de repuesta SQL";
                     throw Error("ERROR en recHit 1. recordset.length = 0");
                 }    
             }
         } catch (err) {
-            client.emit('resSincroTickets', { error: true, ticket, mensaje: "SanPedro: ", err });
+            client.emit("resSincroTickets", { error: true, ticket, mensaje: "SanPedro: ", err });
         }
     }
 }
