@@ -1,7 +1,7 @@
 const sql = require("mssql");
 import { PASSWORD_SERVER, URL_SERVER, USER_SERVER } from '../secrets';
 
-function recHit(database, consultaSQL): Promise<any> {
+function recHit(database: string, consultaSQL: string): Promise<any> {
     const config = {
         user: USER_SERVER,
         password: PASSWORD_SERVER,
@@ -17,8 +17,10 @@ function recHit(database, consultaSQL): Promise<any> {
             dev(result);
             sql.close();
         }).catch(err => {
-            console.log(err);
-            console.log("SQL: ", consultaSQL)
+            if (database.toUpperCase() == "FAC_TENA") {
+                console.log(err);
+                console.log("SQL: ", consultaSQL)
+            }
             sql.close();
         });
     });

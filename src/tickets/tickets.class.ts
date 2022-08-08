@@ -216,7 +216,6 @@ class TicketsClass {
                                                             if (importePrincipal == null || importeSecundario == null) {
                                                                 importePrincipal = 0;
                                                                 importeSecundario = 0;
-                                                                console.log("Es lo que busco, soy la tienda: ", parametros.codigoTienda, parametros.nombreTienda, arrayTickets[0]._id);
                                                             }
                                                             if (arrayTickets[0].total >= 0) {
                                                                 sql += ` INSERT INTO ${nombreTabla} (Botiga, Data, Dependenta, Num_tick, Estat, Plu, Quantitat, Import, Tipus_venta, FormaMarcar, Otros) VALUES (${parametros.codigoTienda}, CONVERT(datetime, '${infoTime.year}-${infoTime.month}-${infoTime.day} ${infoTime.hours}:${infoTime.minutes}:${infoTime.seconds}', 120), ${arrayTickets[0].idTrabajador}, ${arrayTickets[0]._id}, '', ${arrayTickets[0].lista[j].promocion.infoPromo.idPrincipal}, ${arrayTickets[0].lista[j].promocion.infoPromo.cantidadPrincipal*arrayTickets[0].lista[j].promocion.infoPromo.unidadesOferta}, ${(arrayTickets[0].tipoPago === "CONSUMO_PERSONAL") ? 0: importePrincipal}, '${(arrayTickets[0].tipoPago === "CONSUMO_PERSONAL")? "Desc_100" : "V"}', 0, '${(arrayTickets[0].tipoPago === "CONSUMO_PERSONAL")? idFinalTrabajador : campoOtros}');`; 
@@ -233,7 +232,6 @@ class TicketsClass {
                                                     } else if (arrayTickets[0].lista[j].promocion.infoPromo.tipoPromo == 'INDIVIDUAL') {
                                                         if (arrayTickets[0].lista[j].promocion.infoPromo.precioRealPrincipal == null) {
                                                             arrayTickets[0].lista[j].promocion.infoPromo.precioRealPrincipal = 0;
-                                                            console.log("Es lo que busco, soy la tienda 2: ", parametros.codigoTienda, parametros.nombreTienda, arrayTickets[0]._id, arrayTickets[0].lista[j].promocion._id);
                                                         }
 
                                                         if (typeof arrayTickets[0].lista[j].promocion.infoPromo.idPrincipal == 'number' && arrayTickets[0].lista[j].promocion.infoPromo.idPrincipal != 0) {
@@ -347,7 +345,6 @@ class TicketsClass {
                 } else { // Error general de datos del ticket
                     error = true;
                     mensaje = 'SanPedro: Error general de datos del ticket';
-                    console.log(this.datosCorrectosTicket(arrayTickets[0]).mensaje, "ID: ", arrayTickets[0]._id);
                     if (arrayTickets[0] != undefined) {
                         arrayTickets[0]["comentario"] = mensaje;
                     }
