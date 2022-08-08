@@ -478,9 +478,7 @@ class TicketsClass {
                                             INSERT INTO tocGameInfo (licencia, bbdd, ultimoIdTicket, codigoInternoTienda, nombreTienda, token, version, ultimaConexion) 
                                                 VALUES (${parametros.licencia}, '${parametros.database}', ${ticket._id}, ${parametros.codigoTienda}, '${parametros.nombreTienda}', NEWID(), '2.0.0', ${Date.now()})
                                         END`;
-                        const res2 = await recHit('Hit', sql2);
-                        ticket.enviado = true;
-                        client.emit("resSincroTickets", { error: false, ticket });
+                        await recHit('Hit', sql2);
                     } else {
                         ticket.comentario = "Respuesta SQL incontrolada";
                         throw Error("Error, caso incontrolado. Respuesta desconocida: ticket: " + ticket);
@@ -488,7 +486,8 @@ class TicketsClass {
                 } else {
                     ticket.comentario = "Caso no controlado de repuesta SQL";
                     throw Error("ERROR en recHit 1. recordset.length = 0");
-                }    
+                }
+                client.emit("resSincroTickets", { error: false, ticket });
             }
         } catch (err) {
             client.emit("resSincroTickets", { error: true, ticket, mensaje: "SanPedro: ", err });
