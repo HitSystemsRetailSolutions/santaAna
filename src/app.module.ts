@@ -20,7 +20,6 @@ import { UtilesModule } from './utiles/utiles.module';
 import { EntregasController } from './entregas/entregas.controller';
 import { ImpresorasIpController } from './impresoras-ip/impresoras-ip.controller';
 import { OrdaticController } from './ordatic/ordatic.controller';
-import { AppFirebaseController } from './app-firebase/app-firebase.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -30,7 +29,7 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', 'public'),
     })
   ],
-  controllers: [AppController, ClientesController, ParametrosController, DatosController, ArticulosController, MenusController, TeclasController, DependientasController, FamiliasController, PromocionesController, InfoTicketController, CestasController, TestController, TicketsController, TurnosController, EntregasController, ImpresorasIpController, OrdaticController, AppFirebaseController],
+  controllers: [AppController, ClientesController, ParametrosController, DatosController, ArticulosController, MenusController, TeclasController, DependientasController, FamiliasController, PromocionesController, InfoTicketController, CestasController, TestController, TicketsController, TurnosController, EntregasController, ImpresorasIpController, OrdaticController],
   providers: [AppService, SocketsGateway],
 })
 export class AppModule {}
