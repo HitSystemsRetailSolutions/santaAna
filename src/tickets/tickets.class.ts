@@ -364,9 +364,6 @@ class TicketsClass {
 
     async insertarTicketsNueva(ticket: TicketsInterface, parametros: ParametrosInterface, client: any) {
         try {
-            if (parametros.codigoTienda == 842) {
-                console.log("Prueba Eze tienda demo. Petición: ", Date.now());
-            }
             let sql = "";
             let numArticulos = ticket.lista.length; // numArticulos puede cambiar con las ofertas
             const checkParametros = this.datosCorrectosParametros(parametros).error;
