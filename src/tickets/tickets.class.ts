@@ -364,6 +364,9 @@ class TicketsClass {
 
     async insertarTicketsNueva(ticket: TicketsInterface, parametros: ParametrosInterface, client: any) {
         try {
+            if (parametros.codigoTienda == 842) {
+                console.log("Prueba Eze tienda demo. Petición: ", Date.now());
+            }
             let sql = "";
             let numArticulos = ticket.lista.length; // numArticulos puede cambiar con las ofertas
             const checkParametros = this.datosCorrectosParametros(parametros).error;
@@ -442,18 +445,9 @@ class TicketsClass {
                 } // end for
     
                 sql = `
-                    IF ((SELECT COUNT(*) FROM ${nombreTabla} WHERE botiga =  ${parametros.codigoTienda} AND Num_tick = ${ticket._id}) = ${numArticulos})
-                        BEGIN
-                            DELETE FROM ${nombreTabla} WHERE botiga = ${parametros.codigoTienda} AND Num_tick = ${ticket._id};
-                            ${sql}
-                            SELECT 'YA_EXISTE' as resultado;
-                        END
-                    ELSE
-                        BEGIN
-                            DELETE FROM ${nombreTabla} WHERE botiga = ${parametros.codigoTienda} AND Num_tick = ${ticket._id};
-                            ${sql}
-                            SELECT 'OK' as resultado;
-                        END
+                    DELETE FROM ${nombreTabla} WHERE botiga = ${parametros.codigoTienda} AND Num_tick = ${ticket._id};
+                    ${sql}
+                    SELECT 'OK' as resultado;
                 `;
                 logger.Info(`tienda: ${parametros.codigoTienda} idTicket: ${ticket._id} sql: ${sql}`); // TRAZA TEMPORAL
                 ticket.intentos += 1;
