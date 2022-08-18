@@ -184,6 +184,9 @@ class CajasClass {
                         SELECT 'NOP' as resultado, 'No existe la fila para esta tienda en tocGameInfo' as mensaje
                     END
                 `;
+                if (parametros.codigoTienda == 888) {
+                    console.log(sqlCompleta);
+                }
                 let resSqlRepeticion = null;
                 let errorSalir = false;
                 try {
