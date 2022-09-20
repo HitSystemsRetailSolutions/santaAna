@@ -148,7 +148,7 @@ export class MenusClass {
                        let menus =[]
                         for (let index = 0; index < 7; index++) {
                        
-                            if(menu[`DosNivells_${index}_Texte`]!="" && menu[`DosNivells_${index}_Texte`]!= undefined){
+                            if(menu[`DosNivells_${index}_Texte`]!="" || menu[`DosNivells_${index}_Texte`]!= undefined){
                                 let id = `DosNivells_${index}`
                                 let nombre = menu[`DosNivells_${index}_Texte`]
                                 let tag =  menu[`DosNivells_${index}_Tag`]
