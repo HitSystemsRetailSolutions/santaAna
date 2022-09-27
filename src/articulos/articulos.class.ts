@@ -53,29 +53,24 @@ export class ArticulosClass {
     }
 
     /* Para todos los clientes Eze 4.0 */
-    getTarifasEspeciales(database: string): Promise<any[]> {
+    async getTarifasEspeciales(database: string): Promise<any[]> {
         const sql = "SELECT te.Codi as idTarifa, te.PREU AS precioConIva, cc.Valor as idClienteFinal FROM TarifesEspecials te LEFT JOIN clients cl ON te.TarifaCodi = cl.[Desconte 5] LEFT JOIN ConstantsClient cc ON cl.Codi = cc.Codi AND cc.Variable = 'CFINAL' WHERE cc.Valor IS NOT NULL AND cc.Valor <> ''";
-        return recHit(database, sql).then((resTarifas) => {
-            return resTarifas.recordset;
+        return (await recHit(database, sql)).recordset;
+    }
+
+    getTarifaEspecialVieja(database, codigoCliente: number) {
+        return recHit(database, `SELECT Codi as id, PREU as precioConIva FROM TarifesEspecials WHERE TarifaCodi = (select [Desconte 5] from clients where Codi = ${codigoCliente}) AND TarifaCodi <> 0`).then((res: IResult<any>) => {
+            if (res) {
+                if (res.recordset.length > 0) {
+                    return res.recordset;
+                }
+            }
+            return [];
         }).catch((err) => {
             console.log(err);
             return [];
         });
     }
-
-    // getTarifaEspecial(database, codigoCliente: number) {
-    //     return recHit(database, `SELECT Codi as id, PREU as precioConIva FROM TarifesEspecials WHERE TarifaCodi = (select [Desconte 5] from clients where Codi = ${codigoCliente}) AND TarifaCodi <> 0`).then((res: IResult<any>) => {
-    //         if (res) {
-    //             if (res.recordset.length > 0) {
-    //                 return res.recordset;
-    //             }
-    //         }
-    //         return [];
-    //     }).catch((err) => {
-    //         console.log(err);
-    //         return [];
-    //     });
-    // }
 
     private async acoplarAtributos(database: string, arrayArticulos: any[]) {
         recHit(database, "SELECT CodiArticle as idAtributo, Valor as idDestino FROM ArticlesPropietats WHERE Variable = 'ES_SUPLEMENT'").then((res) => {
@@ -103,7 +98,7 @@ export class ArticulosClass {
     async getArticulosConTarifasEspeciales(database: string, idCliente: number) {
         try {
             const articulos = await articulosInstance.getArticulos(database);
-            const tarifaEspecial = await articulosInstance.getTarifaEspecial(database, idCliente);
+            const tarifaEspecial = await articulosInstance.getTarifaEspecialVieja(database, idCliente);
             return { error: false, info: this.fusionarArticulosConTarifasEspeciales(articulos, tarifaEspecial) };
         } catch(error) {
             return { error: true, mensaje: 'SanPedro: Error en CATCH getArticulosConTarifasEspeciales' };

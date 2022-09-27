@@ -27,7 +27,7 @@ export class DatosController {
 
             try {
                 let articulosAux = await articulosInstance.getArticulos(database);
-                let tarifasEspeciales = await articulosInstance.getTarifaEspecial(database, codigoTienda);
+                let tarifasEspeciales = await articulosInstance.getTarifaEspecialVieja(database, codigoTienda);
                 const articulos = articulosInstance.fusionarArticulosConTarifasEspeciales(articulosAux, tarifasEspeciales);
                 const menus = await menusInstance.getMenus(database, codigoTienda);
                 const teclas = await teclasInstance.getTeclas(database, licencia);
