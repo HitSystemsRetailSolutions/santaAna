@@ -54,7 +54,7 @@ export class ArticulosClass {
 
     /* Para todos los clientes Eze 4.0 */
     async getTarifasEspeciales(database: string): Promise<any[]> {
-        const sql = "SELECT te.Codi as idTarifa, te.PREU AS precioConIva, cc.Valor as idClienteFinal FROM TarifesEspecials te LEFT JOIN clients cl ON te.TarifaCodi = cl.[Desconte 5] LEFT JOIN ConstantsClient cc ON cl.Codi = cc.Codi AND cc.Variable = 'CFINAL' WHERE cc.Valor IS NOT NULL AND cc.Valor <> ''";
+        const sql = "SELECT te.Codi as idArticulo, te.PREU AS precioConIva, cc.Valor as idClienteFinal FROM TarifesEspecials te LEFT JOIN clients cl ON te.TarifaCodi = cl.[Desconte 5] LEFT JOIN ConstantsClient cc ON cl.Codi = cc.Codi AND cc.Variable = 'CFINAL' WHERE cc.Valor IS NOT NULL AND cc.Valor <> ''";
         return (await recHit(database, sql)).recordset;
     }
 
