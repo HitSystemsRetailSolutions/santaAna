@@ -108,6 +108,7 @@ class CajasClass {
                 let sqlAna2 = '';
                 let sqlPrevisiones = '';
                 let nombreTabla = '[V_Moviments_' + fechaFinal.year + '-' + fechaFinal.month + ']';
+                if (!(typeof infoCaja.totalDatafono3G == "number")) infoCaja.totalDatafono3G = 0;
                 sqlZGJ = `
                 INSERT INTO ${nombreTabla} (Botiga, Data, Dependenta, Tipus_moviment, Import, Motiu) VALUES (${parametros.codigoTienda}, CONVERT(datetime, '${fechaFinal.year}-${fechaFinal.month}-${fechaFinal.day} ${fechaFinal.hours}:${fechaFinal.minutes}:${fechaFinal.seconds}', 120), ${infoCaja.idDependienta}, 'DATAFONO_3G', ${infoCaja.totalDatafono3G}, '');
                 INSERT INTO ${nombreTabla} (Botiga, Data, Dependenta, Tipus_moviment, Import, Motiu) VALUES (${parametros.codigoTienda}, CONVERT(datetime, '${fechaFinal.year}-${fechaFinal.month}-${fechaFinal.day} ${fechaFinal.hours}:${fechaFinal.minutes}:${fechaFinal.seconds}', 120), ${infoCaja.idDependienta}, 'Z', ${infoCaja.calaixFetZ}, '');
