@@ -71,7 +71,7 @@ export interface CajaForSincroInterface {
     }[],
     enviado: boolean,
     enTransito: boolean,
-    totalDatafono3G: number,
+    totalDatafono3G: any,
     totalClearOne: number,
     comentario?: string
 }
