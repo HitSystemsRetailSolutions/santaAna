@@ -5,11 +5,11 @@ import { mesasInstance } from "./mesas.class";
 @Controller("mesas")
 export class MesasController {
     @Post("getEstructuraMesas")
-    getEstructuraMesas(@Body() { token }) {
+    async getEstructuraMesas(@Body() { token }) {
         try {
-            if (token && licencia && idConfiguracion) {
-                if (authInstance.checkToken())
-                    mesasInstance.getEstructuraMesas(idConfiguracion, licencia)
+            if (token) {
+                const parametros = await authInstance.getParametros(token);
+                // mesasInstance.getEstructuraMesas(idConfiguracion, licencia)
             }
             throw Error("Error, faltan parámetros en getEstructuraMesas() mesas.controller");
         } catch (err) {

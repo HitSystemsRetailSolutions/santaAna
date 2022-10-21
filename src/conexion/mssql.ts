@@ -7,7 +7,7 @@ function recHit(database: string, consultaSQL: string): Promise<any> {
         password: PASSWORD_SERVER,
         server: URL_SERVER,
         database: database,
-        requestTimeout: 300000
+        // requestTimeout: 3000
     };
 
     const devolver = new Promise((dev, rej) => {
