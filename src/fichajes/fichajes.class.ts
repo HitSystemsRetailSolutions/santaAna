@@ -2,6 +2,7 @@ import { recHit } from "../conexion/mssql";
 import { TurnosClass } from "../turnos/turnos.class";
 import { ParametrosInterface } from "../parametros/parametros.interface";
 import { FichajeInterface } from "./fichajes.interface";
+import e from "express";
 
 function comprobarParametros(parametros: ParametrosInterface) {
   let error = false;
@@ -176,6 +177,10 @@ class FichajesClass {
           sql += `INSERT INTO cdpDadesFichador (id, tmst, accio, usuari, idr, lloc, comentari) VALUES (0, CONVERT(datetime, '${year}-${month}-${day} ${hours}:${minutes}:${seconds}', 120), 1, ${fichaje.infoFichaje.idTrabajador}, NEWID(), ${parametros.codigoTienda}, '${parametros.nombreTienda}')`;
         } else if (fichaje.tipo === "SALIDA") {
           sql += `INSERT INTO cdpDadesFichador (id, tmst, accio, usuari, idr, lloc, comentari) VALUES (0, CONVERT(datetime, '${year}-${month}-${day} ${hours}:${minutes}:${seconds}', 120), 2, ${fichaje.infoFichaje.idTrabajador}, NEWID(), ${parametros.codigoTienda}, '${parametros.nombreTienda}')`;
+        } else if (fichaje.tipo === "DESCANSO") {
+          sql += `INSERT INTO cdpDadesFichador (id, tmst, accio, usuari, idr, lloc, comentari) VALUES (0, CONVERT(datetime, '${year}-${month}-${day} ${hours}:${minutes}:${seconds}', 120), 3, ${fichaje.infoFichaje.idTrabajador}, NEWID(), ${parametros.codigoTienda}, '${parametros.nombreTienda}')`;
+        } else if (fichaje.tipo === "FINDESCANSO") {
+          sql += `INSERT INTO cdpDadesFichador (id, tmst, accio, usuari, idr, lloc, comentari) VALUES (0, CONVERT(datetime, '${year}-${month}-${day} ${hours}:${minutes}:${seconds}', 120), 4, ${fichaje.infoFichaje.idTrabajador}, NEWID(), ${parametros.codigoTienda}, '${parametros.nombreTienda}')`;
         } else {
           fichaje["comentario"] =
             "Error sanPedro en fichajes, caso desconocido 1";
