@@ -5,9 +5,13 @@ export class AuthClass {
   async getParametros(
     token: TokensCollection["token"]
   ): Promise<TokensCollection> {
-    const parametros = await schAuth.getParametros(token);
+    let tokenLimpio = token.startsWith("Bearer ")
+      ? token.replace("Bearer", "").trim()
+      : token;
+    const parametros = await schAuth.getParametros(tokenLimpio);
     if (parametros) return parametros;
-    return await this.getParametrosHit(token);
+    const resultadoHit = await this.getParametrosHit(tokenLimpio);
+    return resultadoHit;
   }
 
   private async getParametrosHit(
@@ -15,7 +19,7 @@ export class AuthClass {
   ): Promise<TokensCollection> {
     const resultado = await recHit(
       "Hit",
-      `SELECT bbdd as database, licencia, token FROM tocGameInfo WHERE token = '${token}'`
+      `SELECT bbdd, licencia, token FROM tocGameInfo WHERE token = '${token}';`
     );
     if (
       resultado.recordset &&
@@ -24,13 +28,13 @@ export class AuthClass {
     ) {
       const resInsert = await this.addToken(
         token,
-        resultado.recordset[0].database,
+        resultado.recordset[0].bbdd,
         resultado.recordset[0].licencia
       );
       if (resInsert) {
         return {
           token: resultado.recordset[0].token,
-          database: resultado.recordset[0].database,
+          database: resultado.recordset[0].bbdd,
           licencia: resultado.recordset[0].licencia,
         };
       }
