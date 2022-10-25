@@ -39,14 +39,14 @@ export class PromocionesClass {
                 objPrincipal = await recHit(database, `select Codi as _id from articles where familia = '${promociones[i].principal.substring(2)}'`);
                 promociones[i].principal = objPrincipal.recordset;
             } else {
-                promociones[i].principal = [Number(promociones[i].principal)]
+                promociones[i].principal = [{_id: Number(promociones[i].principal)}]
             }
 
             if(promociones[i].secundario.startsWith('F_')) {
                 objSecundario = await recHit(database, `select Codi as _id from articles where familia = '${promociones[i].secundario.substring(2)}'`);
                 promociones[i].secundario = objSecundario.recordset;
             } else {
-                promociones[i].secundario = [Number(promociones[i].secundario)]
+                promociones[i].secundario = [{_id: Number(promociones[i].secundario)}]
             }
             objPrincipal    = null;
             objSecundario   = null;
