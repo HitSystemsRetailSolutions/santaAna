@@ -1,7 +1,10 @@
 import { MongoClient } from "mongodb";
-
-const uri = 'mongodb://127.0.0.1:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false';
+import { MONGO_USER, MONGO_PASSWORD } from "src/secrets";
+const uri = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@34.78.247.153:27017/dbname?authSource=solucionesit365`;
 
 const client = new MongoClient(uri);
 const conexion = client.connect();
-export { conexion };
+
+export async function getDb() {
+  return (await conexion).db("solucionesit365");
+}
