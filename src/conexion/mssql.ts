@@ -1,7 +1,7 @@
 const sql = require("mssql");
 import { PASSWORD_SERVER, URL_SERVER, USER_SERVER } from "../secrets";
 
-function recHit(database: string, consultaSQL: string): Promise<any> {
+export function recHit(database: string, consultaSQL: string): Promise<any> {
   const config = {
     user: USER_SERVER,
     password: PASSWORD_SERVER,
@@ -37,8 +37,6 @@ function recHit(database: string, consultaSQL: string): Promise<any> {
 sql.on("error", (err) => {
   console.log("Evento error SQL: ", err);
 });
-
-
 
 // export function recHit(database: string, query: string) {
 //   const configNueva = {
