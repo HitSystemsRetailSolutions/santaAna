@@ -59,15 +59,25 @@ export class PromocionesClass {
       } else {
         promociones[i].secundario = [Number(promociones[i].secundario)];
       }
-      if (promociones[i].principal && promociones[i].principal.length > 0) {
-        if (promociones[i].secundario && promociones[i].secundario.length > 0) {
+
+      if (
+        promociones[i].principal &&
+        promociones[i].principal.length > 0 &&
+        this.contieneAlgo(promociones[i].principal)
+      ) {
+        if (
+          promociones[i].secundario &&
+          promociones[i].secundario.length > 0 &&
+          this.contieneAlgo(promociones[i].secundario)
+        ) {
           promociones[i].tipo = "COMBO";
         } else {
           promociones[i].tipo = "INDIVIDUAL";
         }
       } else if (
         promociones[i].secundario &&
-        promociones[i].secundario.length > 0
+        promociones[i].secundario.length > 0 &&
+        this.contieneAlgo(promociones[i].secundario)
       ) {
         promociones[i].tipo = "INDIVIDUAL";
       }
@@ -76,6 +86,17 @@ export class PromocionesClass {
     }
 
     return promociones;
+  }
+
+  contieneAlgo(arrayParte: []) {
+    if (arrayParte) {
+      for (let i = 0; i < arrayParte.length; i++) {
+        if (typeof arrayParte[i] == "number" && arrayParte[i] > 0) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   async getPromociones(database: string, codigoCliente: number) {
