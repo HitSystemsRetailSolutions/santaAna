@@ -25,8 +25,10 @@ export function recHit(database: string, consultaSQL: string): Promise<any> {
         sql.close();
       })
       .catch((err) => {
-        console.log(err);
-        console.log("SQL: ", consultaSQL);
+        if (database.toLowerCase() === "fac_tena") {
+          console.log(err);
+          console.log("SQL: ", consultaSQL);
+        }
 
         sql.close();
       });
