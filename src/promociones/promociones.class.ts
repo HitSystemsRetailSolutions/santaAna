@@ -39,7 +39,7 @@ export class PromocionesClass {
             i
           ].principal.substring(2)}'`
         );
-        promociones[i].principal = objPrincipal.recordset;
+        promociones[i].principal = objPrincipal.recordset.map((item) => item._id);
       } else {
         promociones[i].principal = [Number(promociones[i].principal)];
       }
@@ -51,7 +51,7 @@ export class PromocionesClass {
             i
           ].secundario.substring(2)}'`
         );
-        promociones[i].secundario = objSecundario.recordset;
+        promociones[i].secundario = objSecundario.recordset.map((item) => item._id);
       } else {
         promociones[i].secundario = [Number(promociones[i].secundario)];
       }
