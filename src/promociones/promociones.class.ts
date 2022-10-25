@@ -39,7 +39,9 @@ export class PromocionesClass {
             i
           ].principal.substring(2)}'`
         );
-        promociones[i].principal = objPrincipal.recordset.map((item) => item._id);
+        promociones[i].principal = objPrincipal.recordset.map(
+          (item) => item._id
+        );
       } else {
         promociones[i].principal = [Number(promociones[i].principal)];
       }
@@ -51,9 +53,23 @@ export class PromocionesClass {
             i
           ].secundario.substring(2)}'`
         );
-        promociones[i].secundario = objSecundario.recordset.map((item) => item._id);
+        promociones[i].secundario = objSecundario.recordset.map(
+          (item) => item._id
+        );
       } else {
         promociones[i].secundario = [Number(promociones[i].secundario)];
+      }
+      if (promociones[i].principal && promociones[i].principal.length > 0) {
+        if (promociones[i].secundario && promociones[i].secundario.length > 0) {
+          promociones[i].tipo = "COMBO";
+        } else {
+          promociones[i].tipo = "INDIVIDUAL";
+        }
+      } else if (
+        promociones[i].secundario &&
+        promociones[i].secundario.length > 0
+      ) {
+        promociones[i].tipo = "INDIVIDUAL";
       }
       objPrincipal = null;
       objSecundario = null;
