@@ -38,7 +38,7 @@ export class DatosController {
           database
         );
         const familias = await familiasInstance.getFamilias(database);
-        const promociones = await promocionesInstance.getPromociones(
+        const promociones = await promocionesInstance.getPromocionesNueva(
           database,
           codigoTienda
         );

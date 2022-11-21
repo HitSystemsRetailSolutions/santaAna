@@ -98,50 +98,5 @@ export class PromocionesClass {
     }
     return false;
   }
-
-  async getPromociones(database: string, codigoCliente: number) {
-    let objPrincipal = null;
-    let objSecundario = null;
-    let promociones = null;
-
-    try {
-      promociones = await this.getPromocionesUgly(database, codigoCliente);
-    } catch (err) {
-      console.log(err);
-      return [];
-    }
-
-    for (let i = 0; i < promociones.length; i++) {
-      if (promociones[i].principal.startsWith("F_")) {
-        objPrincipal = await recHit(
-          database,
-          `select Codi as _id from articles where familia = '${promociones[
-            i
-          ].principal.substring(2)}'`
-        );
-        promociones[i].principal = objPrincipal.recordset;
-      } else {
-        promociones[i].principal = [{ _id: Number(promociones[i].principal) }];
-      }
-
-      if (promociones[i].secundario.startsWith("F_")) {
-        objSecundario = await recHit(
-          database,
-          `select Codi as _id from articles where familia = '${promociones[
-            i
-          ].secundario.substring(2)}'`
-        );
-        promociones[i].secundario = objSecundario.recordset;
-      } else {
-        promociones[i].secundario = [
-          { _id: Number(promociones[i].secundario) },
-        ];
-      }
-      objPrincipal = null;
-      objSecundario = null;
-    }
-
-    return promociones;
-  }
 }
 export const promocionesInstance = new PromocionesClass();
