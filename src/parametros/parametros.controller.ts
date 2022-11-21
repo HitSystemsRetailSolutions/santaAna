@@ -8,7 +8,7 @@ export class ParametrosController {
     try {
       if (password && numLlicencia) {
         if (password === PASSWORD_INSTALLWIZARD) {
-          const sqlParaImprimir = `SELECT ll.Llicencia, ll.Empresa, ll.LastAccess, we.Db, ISNULL(ti.ultimoIdTicket, 0) as ultimoIdTicket, ti.token FROM llicencies ll LEFT JOIN Web_Empreses we ON ll.Empresa = we.Nom LEFT JOIN tocGameInfo ti ON ti.licencia = ${data.numLlicencia} WHERE ll.Llicencia = ${data.numLlicencia}`;
+          const sqlParaImprimir = `SELECT ll.Llicencia, ll.Empresa, ll.LastAccess, we.Db, ISNULL(ti.ultimoIdTicket, 0) as ultimoIdTicket, ti.token FROM llicencies ll LEFT JOIN Web_Empreses we ON ll.Empresa = we.Nom LEFT JOIN tocGameInfo ti ON ti.licencia = ${numLlicencia} WHERE ll.Llicencia = ${numLlicencia}`;
           const res1 = await recHit("Hit", sqlParaImprimir);
           const sqlParaImprimir2 = `SELECT Nom, Codi as codigoTienda FROM clients WHERE Codi = (SELECT Valor1 FROM ParamsHw WHERE Codi = ${res1.recordset[0].Llicencia})`;
           const data2 = await recHit(res1.recordset[0].Db, sqlParaImprimir2);
@@ -39,6 +39,7 @@ export class ParametrosController {
               token: res1.recordset[0].token,
             };
           }
+
         }
       }
       throw Error("Error en la autenticación del servidor");
