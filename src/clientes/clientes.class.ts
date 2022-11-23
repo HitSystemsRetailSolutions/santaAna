@@ -132,30 +132,13 @@ export class Clientes {
       });
   }
 
-  getPuntosClienteFinal(database: string, idClienteFinal: string) {
-    return recHit(
-      database,
-      `SELECT Punts AS puntos FROM punts WHERE idClient = '${idClienteFinal}'`
-    )
-      .then((res) => {
-        if (res.recordset.length == 1) {
-          return { error: false, info: res.recordset[0].puntos };
-        } else {
-          return {
-            error: true,
-            mensaje:
-              "SanPedro: Error, no se encuentra el cliente en la tabla de puntos",
-          };
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        return {
-          error: true,
-          mensaje:
-            "SanPedro: Error en catch getPuntosClienteFinal (clientes.class)",
-        };
-      });
+  /* Eze 4.0 */
+  async getPuntosClienteFinal(database: string, idClienteFinal: string): Promise<number> {
+    const res = await recHit(database, `SELECT Punts AS puntos FROM punts WHERE idClient = '${idClienteFinal}'`);
+    if (res.recordset.length === 1) {
+      return res.recordset[0].puntos;
+    }
+    return null;
   }
 
   crearNuevoCliente(

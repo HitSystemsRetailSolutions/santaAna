@@ -2,7 +2,7 @@ import { recHit } from "../conexion/mssql";
 import { TokensCollection } from "./auth.interface";
 import * as schAuth from "./auth.mongodb";
 export class AuthClass {
-  async getParametros(
+  public async getParametros(
     token: TokensCollection["token"]
   ): Promise<TokensCollection> {
     let tokenLimpio = token.startsWith("Bearer ")

@@ -1,7 +1,9 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
-import { UtilesModule } from 'src/utiles/utiles.module';
+import { Controller, Post, Body, Get, Req } from '@nestjs/common';
+import { authInstance } from '../auth/auth.class';
+import { UtilesModule } from '../utiles/utiles.module';
 import { articulosInstance } from '../articulos/articulos.class';
 import { clientesInstance } from './clientes.class';
+import { Request } from "express";
 
 @Controller('clientes')
 export class ClientesController {
@@ -60,17 +62,22 @@ export class ClientesController {
         }
     }
 
+    /* Eze 4.0 */
     @Post('getPuntosCliente')
-    getPuntosCliente(@Body() params) {
-        if (params.idClienteFinal != undefined && params.database != undefined) {
-            return clientesInstance.getPuntosClienteFinal(params.database, params.idClienteFinal).then((res) => {
-                return res;
-            }).catch((err) =>  {
-                console.log(err);
-                return { error: true, mensaje: 'SanPedro: Error en clientes/getPuntosCliente > getPuntosClienteFinal'};
-            });
-        } else {
-            return { error: true, mensaje: 'SanPedro: Error, faltan datos en clientes/getPuntosCliente' };
+    async getPuntosCliente(@Body() { idClienteFinal }, @Req() req: Request) {
+        try {
+            if (idClienteFinal) {
+                const token = req.headers.authorization;
+                const parametros = await authInstance.getParametros(token);
+                if (parametros) {
+                    return await clientesInstance.getPuntosClienteFinal(parametros.database, idClienteFinal);
+                }
+                throw Error("Autenticación incorrecta en clientes/getPuntosCliente");
+            }
+            throw Error("Faltan datos en clientes/getPuntosCliente");
+        } catch (err) {
+            console.log(err);
+            return false;
         }
     }
 
