@@ -99,23 +99,16 @@ export class Clientes {
       });
   }
 
-  getClientes(database: string) {
-    return recHit(
+  /* Eze 4.0 */
+  async getClientes(database: string) {
+    const res = await recHit(
       database,
       "select Id as id, Nom as nombre, IdExterna as tarjetaCliente from ClientsFinals WHERE Id IS NOT NULL AND Id <> ''"
-    )
-      .then((res: IResult<any>) => {
-        if (res) {
-          if (res.recordset.length > 0) {
-            return res.recordset;
-          }
-        }
-        return [];
-      })
-      .catch((err) => {
-        console.log(err);
-        return [];
-      });
+    );
+    if (res.recordset?.length > 0) {
+      return res.recordset;
+    }
+    return null;
   }
 
   resetPuntosCliente(database: string, idClienteFinal: string) {
@@ -133,8 +126,14 @@ export class Clientes {
   }
 
   /* Eze 4.0 */
-  async getPuntosClienteFinal(database: string, idClienteFinal: string): Promise<number> {
-    const res = await recHit(database, `SELECT Punts AS puntos FROM punts WHERE idClient = '${idClienteFinal}'`);
+  async getPuntosClienteFinal(
+    database: string,
+    idClienteFinal: string
+  ): Promise<number> {
+    const res = await recHit(
+      database,
+      `SELECT Punts AS puntos FROM punts WHERE idClient = '${idClienteFinal}'`
+    );
     if (res.recordset.length === 1) {
       return res.recordset[0].puntos;
     }
