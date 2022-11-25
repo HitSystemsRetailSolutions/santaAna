@@ -1,7 +1,7 @@
 import { Controller, Get, Req } from "@nestjs/common";
 import { Request } from "express";
 import { authInstance } from "../auth/auth.class";
-import { articulosInstance } from "../articulos/articulos.class";
+import { tarifasInstance } from "./tarifas.class";
 
 @Controller("tarifas")
 export class TarifasController {
@@ -13,9 +13,7 @@ export class TarifasController {
       const parametros = await authInstance.getParametros(token);
 
       if (parametros) {
-        return await articulosInstance.getTarifasEspeciales(
-          parametros.database
-        );
+        return await tarifasInstance.getTarifasEspeciales(parametros.database);
       }
       throw Error(
         "Error, autenticación errónea en tarifas/getTarifasEspeciales"

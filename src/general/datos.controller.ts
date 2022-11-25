@@ -9,6 +9,7 @@ import { infoTicketInstance } from "../info-ticket/info-ticket.class";
 import { clientesInstance } from "../clientes/clientes.class";
 import { Request } from "express";
 import { authInstance } from "../auth/auth.class";
+import { tarifasInstance } from "../tarifas/tarifas.class";
 
 @Controller("datos")
 export class DatosController {
@@ -23,7 +24,7 @@ export class DatosController {
           let articulosAux = await articulosInstance.getArticulos(
             parametros.database
           );
-          let tarifasEspeciales = await articulosInstance.getTarifasEspeciales(
+          let tarifasEspeciales = await tarifasInstance.getTarifasEspeciales(
             parametros.database
           );
           const articulos =

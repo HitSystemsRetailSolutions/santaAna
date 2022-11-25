@@ -12,10 +12,17 @@ export async function getParametros(token: TokensCollection["token"]) {
 export async function addToken(
   token: TokensCollection["token"],
   database: TokensCollection["database"],
-  licencia: TokensCollection["licencia"]
+  licencia: TokensCollection["licencia"],
+  codigoInternoTienda: TokensCollection["codigoInternoTienda"]
 ) {
   const db = await getDb();
   const tokensCollection = db.collection<TokensCollection>("tokens");
-  return (await tokensCollection.insertOne({ token, database, licencia }))
-    .acknowledged;
+  return (
+    await tokensCollection.insertOne({
+      token,
+      database,
+      licencia,
+      codigoInternoTienda,
+    })
+  ).acknowledged;
 }

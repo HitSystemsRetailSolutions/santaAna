@@ -1,8 +1,7 @@
 import { recHit } from "../conexion/mssql";
-import { TurnosClass } from "../turnos/turnos.class";
+
 import { ParametrosInterface } from "../parametros/parametros.interface";
 import { FichajeInterface } from "./fichajes.interface";
-import e from "express";
 
 function comprobarParametros(parametros: ParametrosInterface) {
   let error = false;

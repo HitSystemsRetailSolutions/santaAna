@@ -21,23 +21,24 @@ export class AuthClass {
   ): Promise<TokensCollection> {
     const resultado = await recHit(
       "Hit",
-      `SELECT bbdd, licencia, token FROM tocGameInfo WHERE token = '${token}';`
+      `SELECT bbdd, licencia, token, codigoInternoTienda FROM tocGameInfo WHERE token = '${token}';`
     );
     if (
-      resultado.recordset &&
-      resultado.recordset.length === 1 &&
-      resultado.recordset[0].token === token
+      resultado?.recordset?.length === 1 &&
+      resultado?.recordset[0]?.token === token
     ) {
       const resInsert = await this.addToken(
         token,
         resultado.recordset[0].bbdd,
-        resultado.recordset[0].licencia
+        resultado.recordset[0].licencia,
+        resultado.recordset[0].codigoInternoTienda
       );
       if (resInsert) {
         return {
           token: resultado.recordset[0].token,
           database: resultado.recordset[0].bbdd,
           licencia: resultado.recordset[0].licencia,
+          codigoInternoTienda: resultado.recordset[0].codigoInternoTienda
         };
       }
       throw Error(
@@ -50,9 +51,10 @@ export class AuthClass {
   private async addToken(
     token: TokensCollection["token"],
     database: TokensCollection["database"],
-    licencia: TokensCollection["licencia"]
+    licencia: TokensCollection["licencia"],
+    codigoInternoTienda: TokensCollection["codigoInternoTienda"]
   ) {
-    return await schAuth.addToken(token, database, licencia);
+    return await schAuth.addToken(token, database, licencia, codigoInternoTienda);
   }
 
   public getToken(req: Request) {
