@@ -2,21 +2,6 @@ import { IResult } from 'mssql';
 import { recHit } from '../conexion/mssql';
 
 export class ArticulosClass {
-    /* SILEMA APP */
-    buscarArticulos(database: string, busqueda: string) {
-        return recHit(database, `SELECT TOP 15 Codi as idArticulo, NOM as nombre, PREU as precioConIva, TipoIva as tipoIva, EsSumable as esSumable, Familia as familia, ISNULL(PreuMajor, 0) as precioBase FROM Articles WHERE Nom like '%${busqueda}%'`).then((res: IResult<any>) => {
-            if (res) {
-                if (res.recordset.length > 0) {
-                    return res.recordset;
-                }
-            }
-            return [];
-        }).catch((err) =>  {
-            console.log(err);
-            return [];
-        });
-    }
-
     getArticulos(database: string) {
         return recHit(database, 'SELECT Codi as _id, NOM as nombre, PREU as precioConIva, TipoIva as tipoIva, EsSumable as esSumable, Familia as familia, ISNULL(PreuMajor, 0) as precioBase FROM Articles').then((res: IResult<any>) => {
             if (res) {
@@ -52,33 +37,10 @@ export class ArticulosClass {
         });
     }
 
-    /* Para todos los clientes Eze 4.0 */
+    /* Eze 4.0 */
     async getTarifasEspeciales(database: string): Promise<any[]> {
         const sql = "SELECT te.Codi as idArticulo, te.PREU AS precioConIva, cc.Valor as idClienteFinal FROM TarifesEspecials te LEFT JOIN clients cl ON te.TarifaCodi = cl.[Desconte 5] LEFT JOIN ConstantsClient cc ON cl.Codi = cc.Codi AND cc.Variable = 'CFINAL' WHERE cc.Valor IS NOT NULL AND cc.Valor <> ''";
         return (await recHit(database, sql)).recordset;
-    }
-
-    getTarifaEspecialVieja(database, codigoCliente: number) {
-        return recHit(database, `SELECT Codi as id, PREU as precioConIva FROM TarifesEspecials WHERE TarifaCodi = (select [Desconte 5] from clients where Codi = ${codigoCliente}) AND TarifaCodi <> 0`).then((res: IResult<any>) => {
-            if (res) {
-                if (res.recordset.length > 0) {
-                    return res.recordset;
-                }
-            }
-            return [];
-        }).catch((err) => {
-            console.log(err);
-            return [];
-        });
-    }
-
-    private async acoplarAtributos(database: string, arrayArticulos: any[]) {
-        recHit(database, "SELECT CodiArticle as idAtributo, Valor as idDestino FROM ArticlesPropietats WHERE Variable = 'ES_SUPLEMENT'").then((res) => {
-            
-        }).catch((err) => {
-            console.log(err);
-
-        });
     }
 
     fusionarArticulosConTarifasEspeciales(articulos, arrayTarifasEspeciales) {

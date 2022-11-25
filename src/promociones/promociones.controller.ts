@@ -1,18 +1,19 @@
-import { Body, Controller, Get, Post, Req } from "@nestjs/common";
+import { Body, Controller, Get, Req } from "@nestjs/common";
 import { Request } from "express";
-import { authInstance } from "src/auth/auth.class";
+import { authInstance } from "../auth/auth.class";
 import { promocionesInstance } from "./promociones.class";
 
 @Controller("promociones")
 export class PromocionesController {
-  /* Para tocGameV4 */
+  /* Eze 4.0*/
   @Get("getPromociones")
   async getPromociones(@Req() req: Request) {
     try {
-      const token = req.headers.authorization;
-      if (token) {
-        const parametros = await authInstance.getParametros(token);
-        return promocionesInstance.getPromocionesNueva(
+      const token = authInstance.getToken(req);
+      const parametros = await authInstance.getParametros(token);
+
+      if (parametros) {
+        return await promocionesInstance.getPromocionesNueva(
           parametros.database,
           parametros.licencia
         );

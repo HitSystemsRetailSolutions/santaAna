@@ -7,65 +7,54 @@ import { Request } from "express";
 
 @Controller("clientes")
 export class ClientesController {
-  /* Comprueba VIP y obitene los puntos del cliente también */
-  @Post("comprobarVIP")
-  comprobarVIP(@Body() params) {
-    if (params.database != undefined && params.idClienteFinal != undefined) {
-      return clientesInstance
-        .comprobarVIP(params.database, params.idClienteFinal)
-        .then((res: any) => {
-          if (res.info != undefined) {
-            if (res.info.idCliente != undefined && res.error == false) {
-              return articulosInstance
-                .getArticulosConTarifasEspeciales(
-                  params.database,
-                  res.info.idCliente
-                )
-                .then((articulosEspeciales) => {
-                  if (articulosEspeciales.error == false) {
-                    return {
-                      error: false,
-                      articulosEspeciales: articulosEspeciales.info,
-                      info: res.info,
-                    };
-                  }
-                  return { error: true, mensaje: articulosEspeciales.mensaje };
-                })
-                .catch((err) => {
-                  console.log(err);
-                  return {
-                    error: true,
-                    mensaje:
-                      "SanPedro: Error en catch clientes/comprobarVIP getArticulosConTarifasEspeciales",
-                  };
-                });
-            }
-          }
-
-          return res;
-        })
-        .catch((err) => {
-          console.log(err);
-          return {
-            error: true,
-            mensaje: "SanPedro: Error en clientes/comprobarVIP catch",
-          };
-        });
+  /* Eze 4.0 */
+  @Post("getClientConfig")
+  async getClientConfig(@Body() { idClienteFinal }, @Req() req: Request) {
+    try {
+      if (idClienteFinal) {
+        const token = authInstance.getToken(req);
+        const parametros = await authInstance.getParametros(token);
+        if (parametros) {
+          return await clientesInstance.getClientConfig(parametros.database, idClienteFinal);
+        }
+        throw Error("Error, autenticación errónea en clientes/esVip");
+      }
+      throw Error("Error, faltan datos en clientes/esVip");
+    } catch (err) {
+      console.log(err);
+      return false;
     }
-    return {
-      error: true,
-      mensaje: "SanPedro: Faltan datos en clientes/comprobarVIP",
-    };
   }
 
   /* Eze 4.0 */
   @Get("getClientesFinales")
   async getClientesFinales(@Req() req: Request) {
     try {
-      const token = req.headers.authorization;
+      const token = authInstance.getToken(req);
       const parametros = await authInstance.getParametros(token);
       if (parametros) {
         return await clientesInstance.getClientes(parametros.database);
+      }
+      throw Error("Error, autenticación errónea en clientes/getClientesFinales");
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  /* Eze 4.0 */
+  @Post("resetPuntosCliente")
+  async resetPuntosCliente(@Body() { idClienteFinal }, @Req() req: Request) {
+    try {
+      if (!idClienteFinal)
+        throw Error("Faltan datos en clientes/resetPuntosCliente");
+      const token = authInstance.getToken(req);
+      const parametros = await authInstance.getParametros(token);
+      if (parametros) {
+        return await clientesInstance.resetPuntosCliente(
+          parametros.database,
+          idClienteFinal
+        );
       }
       throw Error("Error, autenticación errónea");
     } catch (err) {
@@ -74,43 +63,12 @@ export class ClientesController {
     }
   }
 
-  @Post("resetPuntosCliente")
-  resetPuntosCliente(@Body() params) {
-    if (params.idClienteFinal != undefined && params.database != undefined) {
-      return clientesInstance
-        .resetPuntosCliente(params.database, params.idClienteFinal)
-        .then((res) => {
-          if (res) {
-            return { error: false };
-          } else {
-            return {
-              error: true,
-              mensaje:
-                "SanPedro: Error, en clientes/resetPuntosCliente > resetPuntosCliente()",
-            };
-          }
-        })
-        .catch((err) => {
-          return {
-            error: true,
-            mensaje:
-              "SanPedro: Error, en clientes/resetPuntosCliente > resetPuntosCliente() CATCH",
-          };
-        });
-    } else {
-      return {
-        error: true,
-        mensaje: "SanPedro: Error, faltan datos en clientes/resetPuntosCliente",
-      };
-    }
-  }
-
   /* Eze 4.0 */
   @Post("getPuntosCliente")
   async getPuntosCliente(@Body() { idClienteFinal }, @Req() req: Request) {
     try {
       if (idClienteFinal) {
-        const token = req.headers.authorization;
+        const token = authInstance.getToken(req);
         const parametros = await authInstance.getParametros(token);
         if (parametros) {
           return await clientesInstance.getPuntosClienteFinal(
@@ -127,27 +85,32 @@ export class ClientesController {
     }
   }
 
+  /* Eze 4.0 */
   @Post("crearNuevoCliente")
-  crearNuevoCliente(@Body() params) {
-    if (
-      UtilesModule.checkVariable(
-        params.idTarjetaCliente,
-        params.nombreCliente,
-        params.idCliente,
-        params.parametros
-      )
-    ) {
-      return clientesInstance.crearNuevoCliente(
-        params.idTarjetaCliente,
-        params.nombreCliente,
-        params.idCliente,
-        params.parametros.database
-      );
-    } else {
-      return {
-        error: true,
-        mensaje: "Error SanPedro: clientes/crearNuevoCliente FALTAN DATOS",
-      };
+  async crearNuevoCliente(
+    @Body() { idTarjetaCliente, nombreCliente, idCliente },
+    @Req() req: Request
+  ) {
+    try {
+      if (
+        UtilesModule.checkVariable(idTarjetaCliente, nombreCliente, idCliente)
+      ) {
+        const token = authInstance.getToken(req);
+        const parametros = await authInstance.getParametros(token);
+        if (parametros) {
+          return await clientesInstance.crearNuevoCliente(
+            idTarjetaCliente,
+            nombreCliente,
+            idCliente,
+            parametros.database
+          );
+        }
+        throw Error("Autenticación incorrecta en clientes/crearNuevoCliente");
+      }
+      throw Error("Faltan datos en clientes/crearNuevoCliente");
+    } catch (err) {
+      console.log(err);
+      return false;
     }
   }
 }

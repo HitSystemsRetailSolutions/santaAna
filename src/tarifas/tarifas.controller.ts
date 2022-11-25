@@ -1,19 +1,29 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Req } from "@nestjs/common";
+import { Request } from "express";
+import { authInstance } from "../auth/auth.class";
 import { articulosInstance } from "../articulos/articulos.class";
 import { UtilesModule } from "../utiles/utiles.module";
 
 @Controller("tarifas")
 export class TarifasController {
-    @Post("getTarifasEspeciales")
-    async getTarifasEspeciales(@Body() params) {
-        try {
-            if (UtilesModule.checkVariable(params.database)) {
-                // Sin el await no sirve el catch !
-                return await articulosInstance.getTarifasEspeciales(params.database);
-            }
-        } catch (err) {
-            console.log(err);
-            return null;
-        }
+  /* Eze 4.0 */
+  @Get("getTarifasEspeciales")
+  async getTarifasEspeciales(@Req() req: Request) {
+    try {
+      const token = authInstance.getToken(req);
+      const parametros = await authInstance.getParametros(token);
+
+      if (parametros) {
+        return await articulosInstance.getTarifasEspeciales(
+          parametros.database
+        );
+      }
+      throw Error(
+        "Error, autenticación errónea en tarifas/getTarifasEspeciales"
+      );
+    } catch (err) {
+      console.log(err);
+      return false;
     }
+  }
 }

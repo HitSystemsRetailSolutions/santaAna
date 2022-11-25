@@ -3,12 +3,11 @@ import { menusInstance } from "../menus/menus.class";
 import { articulosInstance } from "../articulos/articulos.class";
 import { generalInstance } from "./general.class";
 import { teclasInstance } from "../teclas/teclas.class";
-import { dependientasInstance } from "../dependientas/dependientas.class";
+import { dependientasInstance } from "../trabajadores/trabajadores.class";
 import { familiasInstance } from "../familias/familias.class";
 import { promocionesInstance } from "../promociones/promociones.class";
 import { infoTicketInstance } from "../info-ticket/info-ticket.class";
 import { clientesInstance } from "../clientes/clientes.class";
-import { cestasInstance } from "src/cestas/cestas.class";
 
 @Controller("datos")
 export class DatosController {
@@ -34,7 +33,7 @@ export class DatosController {
           );
         const menus = await menusInstance.getMenus(database, codigoTienda);
         const teclas = await teclasInstance.getTeclas(database, licencia);
-        const dependientas = await dependientasInstance.getDependientas(
+        const dependientas = await dependientasInstance.getTrabajadores(
           database
         );
         const familias = await familiasInstance.getFamilias(database);
@@ -47,7 +46,6 @@ export class DatosController {
           codigoTienda
         );
         const clientes = await clientesInstance.getClientes(database);
-        const cestas = await cestasInstance.getCestas(database, codigoTienda);
         const dobleMenus = await menusInstance.getDobleMenus(
           database,
           codigoTienda
@@ -62,7 +60,6 @@ export class DatosController {
           promociones,
           parametrosTicket,
           clientes,
-          cestas,
           dobleMenus,
         };
       }

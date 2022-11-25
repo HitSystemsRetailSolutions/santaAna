@@ -1,29 +1,16 @@
-import { IResult } from "mssql";
 import { recHit } from "src/conexion/mssql";
 
 export class PromocionesClass {
-  getPromocionesUgly(database: string, codigoCliente: number) {
+  /* Eze 4.0 */
+  private async getPromocionesUgly(database: string, codigoCliente: number) {
     const sql = `SELECT Id as _id, Di as fechaInicio, Df as fechaFinal, D_Producte as principal, D_Quantitat as cantidadPrincipal, S_Producte as secundario, S_Quantitat as cantidadSecundario, S_Preu as precioFinal FROM ProductesPromocionats WHERE Client = ${codigoCliente}`;
-    return recHit(database, sql)
-      .then((res: IResult<any>) => {
-        if (codigoCliente == 842) {
-          console.log("La realidad: ", res);
-        }
+    const res = await recHit(database, sql);
 
-        if (res) {
-          if (res.recordset.length > 0) {
-            return res.recordset;
-          }
-        }
-        return [];
-      })
-      .catch((res) => {
-        console.log(res);
-        return [];
-      });
+    if (res?.recordset?.length > 0) return res.recordset;
+    return [];
   }
 
-  /* Para tocGamev4 */
+  /* Eze 4.0 */
   async getPromocionesNueva(database: string, codigoCliente: number) {
     let objPrincipal = null;
     let objSecundario = null;
@@ -40,7 +27,7 @@ export class PromocionesClass {
           ].principal.substring(2)}'`
         );
         promociones[i].principal = objPrincipal.recordset.map(
-          (item) => item._id
+          (item: any) => item._id
         );
       } else {
         promociones[i].principal = [Number(promociones[i].principal)];
@@ -54,7 +41,7 @@ export class PromocionesClass {
           ].secundario.substring(2)}'`
         );
         promociones[i].secundario = objSecundario.recordset.map(
-          (item) => item._id
+          (item: any) => item._id
         );
       } else {
         promociones[i].secundario = [Number(promociones[i].secundario)];
@@ -88,7 +75,7 @@ export class PromocionesClass {
     return promociones;
   }
 
-  contieneAlgo(arrayParte: []) {
+  private contieneAlgo(arrayParte: []) {
     if (arrayParte) {
       for (let i = 0; i < arrayParte.length; i++) {
         if (typeof arrayParte[i] == "number" && arrayParte[i] > 0) {

@@ -6,11 +6,10 @@ import { DatosController } from "./general/datos.controller";
 import { ArticulosController } from "./articulos/articulos.controller";
 import { MenusController } from "./menus/menus.controller";
 import { TeclasController } from "./teclas/teclas.controller";
-import { DependientasController } from "./dependientas/dependientas.controller";
+import { TrabajadoresController } from "./trabajadores/trabajadores.controller";
 import { FamiliasController } from "./familias/familias.controller";
 import { PromocionesController } from "./promociones/promociones.controller";
 import { InfoTicketController } from "./info-ticket/info-ticket.controller";
-import { CestasController } from "./cestas/cestas.controller";
 import { SocketsGateway } from "./sockets.gateway";
 import { TestController } from "./test/test.controller";
 import { TicketsController } from "./tickets/tickets.controller";
@@ -18,11 +17,9 @@ import { TurnosController } from "./turnos/turnos.controller";
 import { UtilesModule } from "./utiles/utiles.module";
 import { EntregasController } from "./entregas/entregas.controller";
 import { ImpresorasIpController } from "./impresoras-ip/impresoras-ip.controller";
-import { OrdaticController } from "./ordatic/ordatic.controller";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 import { TarifasController } from "./tarifas/tarifas.controller";
-import { MesasController } from './mesas/mesas.controller';
 
 @Module({
   imports: [
@@ -38,19 +35,16 @@ import { MesasController } from './mesas/mesas.controller';
     ArticulosController,
     MenusController,
     TeclasController,
-    DependientasController,
+    TrabajadoresController,
     FamiliasController,
     PromocionesController,
     InfoTicketController,
-    CestasController,
     TestController,
     TicketsController,
     TurnosController,
     EntregasController,
     ImpresorasIpController,
-    OrdaticController,
     TarifasController,
-    MesasController,
   ],
   providers: [AppService, SocketsGateway],
 })

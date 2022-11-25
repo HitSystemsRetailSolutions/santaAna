@@ -1,19 +1,28 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { infoTicketInstance } from './info-ticket.class';
+import { Body, Controller, Post, Req } from "@nestjs/common";
+import { Request } from "express";
+import { authInstance } from "../auth/auth.class";
+import { infoTicketInstance } from "./info-ticket.class";
 
-@Controller('info-ticket')
+@Controller("infoTicket")
 export class InfoTicketController {
-    @Post('getInfoTicket')
-    getInfoTicket(@Body() params) {
-        if (params.database != undefined && params.idCliente != undefined) {
-            return infoTicketInstance.getInfoTicket(params.database, params.idCliente).then((res) => {
-                return { error: false, info: res };
-            }).catch((err) => {
-                console.log(err);
-                return { error: true, mensaje: 'SanPedro: Error en catch info-ticket/getInfoTicket' };
-            });
-        } else {
-            return { error: true, mensaje: 'SanPedro: Faltan datos en info-ticket/getInfoTicket' };
+  @Post("getInfoTicket")
+  async getInfoTicket(@Body() { codigoTienda }, @Req() req: Request) {
+    try {
+      if (codigoTienda) {
+        const token = authInstance.getToken(req);
+        const parametros = await authInstance.getParametros(token);
+        if (parametros) {
+          return await infoTicketInstance.getInfoTicket(
+            parametros.database,
+            codigoTienda
+          );
         }
+        throw Error("Error, autenticación errónea en infoTicket/getInfoTicket");
+      }
+      throw Error("Error, faltan datos en infoTicket/getInfoTicket");
+    } catch (err) {
+      console.log(err);
+      return false;
     }
+  }
 }

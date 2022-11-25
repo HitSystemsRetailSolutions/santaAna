@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { recHit } from "../conexion/mssql";
 import { TokensCollection } from "./auth.interface";
 import * as schAuth from "./auth.mongodb";
@@ -5,6 +6,7 @@ export class AuthClass {
   public async getParametros(
     token: TokensCollection["token"]
   ): Promise<TokensCollection> {
+    if (token === null || token === undefined) return null;
     let tokenLimpio = token.startsWith("Bearer ")
       ? token.replace("Bearer", "").trim()
       : token;
@@ -51,6 +53,10 @@ export class AuthClass {
     licencia: TokensCollection["licencia"]
   ) {
     return await schAuth.addToken(token, database, licencia);
+  }
+
+  public getToken(req: Request) {
+    return req.headers.authorization;
   }
 }
 export const authInstance = new AuthClass();
