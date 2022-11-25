@@ -9,7 +9,7 @@ export class ArticulosController {
         if (params.database != undefined && params.codigoCliente != undefined) {
             try {
                 const articulos = await articulosInstance.getArticulos(params.database);
-                const tarifaEspecial = await articulosInstance.getTarifaEspecialVieja(params.database, params.codigoCliente);                
+                const tarifaEspecial = await articulosInstance.getTarifaEspecialVieja(params.database, params.codigoCliente);
                 return { error: false, info: articulosInstance.fusionarArticulosConTarifasEspeciales(articulos, tarifaEspecial) };            
             } catch(err) {
                 console.log(err);

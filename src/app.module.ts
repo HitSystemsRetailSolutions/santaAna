@@ -12,8 +12,6 @@ import { PromocionesController } from "./promociones/promociones.controller";
 import { InfoTicketController } from "./info-ticket/info-ticket.controller";
 import { SocketsGateway } from "./sockets.gateway";
 import { TestController } from "./test/test.controller";
-import { TicketsController } from "./tickets/tickets.controller";
-import { TurnosController } from "./turnos/turnos.controller";
 import { UtilesModule } from "./utiles/utiles.module";
 import { EntregasController } from "./entregas/entregas.controller";
 import { ImpresorasIpController } from "./impresoras-ip/impresoras-ip.controller";
@@ -40,8 +38,6 @@ import { TarifasController } from "./tarifas/tarifas.controller";
     PromocionesController,
     InfoTicketController,
     TestController,
-    TicketsController,
-    TurnosController,
     EntregasController,
     ImpresorasIpController,
     TarifasController,

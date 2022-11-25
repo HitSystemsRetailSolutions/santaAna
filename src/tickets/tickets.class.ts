@@ -249,10 +249,11 @@ class TicketsClass {
                         arrayTickets[0].tipoPago === "CONSUMO_PERSONAL"
                           ? "Desc_100"
                           : "V"
-                      }', '${(
-                        arrayTickets[0].lista[j].suplementosId) ?
-                         arrayTickets[0].lista[j].suplementosId.toString() :
-                          0}', '${
+                      }', '${
+                        arrayTickets[0].lista[j].suplementosId
+                          ? arrayTickets[0].lista[j].suplementosId.toString()
+                          : 0
+                      }', '${
                         arrayTickets[0].tipoPago === "CONSUMO_PERSONAL"
                           ? idFinalTrabajador
                           : campoOtros
@@ -331,10 +332,13 @@ class TicketsClass {
                                   "CONSUMO_PERSONAL"
                                     ? "Desc_100"
                                     : "V"
-                                }', '${(
-                                  arrayTickets[0].lista[j].suplementosId) ?
-                                   arrayTickets[0].lista[j].suplementosId.toString() :
-                                    0}', '${
+                                }', '${
+                                  arrayTickets[0].lista[j].suplementosId
+                                    ? arrayTickets[0].lista[
+                                        j
+                                      ].suplementosId.toString()
+                                    : 0
+                                }', '${
                                   arrayTickets[0].tipoPago ===
                                   "CONSUMO_PERSONAL"
                                     ? idFinalTrabajador
@@ -366,10 +370,13 @@ class TicketsClass {
                                   "CONSUMO_PERSONAL"
                                     ? "Desc_100"
                                     : "V"
-                                }', '${(
-                                  arrayTickets[0].lista[j].suplementosId) ?
-                                   arrayTickets[0].lista[j].suplementosId.toString() :
-                                    0}', '${
+                                }', '${
+                                  arrayTickets[0].lista[j].suplementosId
+                                    ? arrayTickets[0].lista[
+                                        j
+                                      ].suplementosId.toString()
+                                    : 0
+                                }', '${
                                   arrayTickets[0].tipoPago ===
                                   "CONSUMO_PERSONAL"
                                     ? idFinalTrabajador
@@ -402,16 +409,19 @@ class TicketsClass {
                                   "CONSUMO_PERSONAL"
                                     ? "Desc_100"
                                     : "V"
-                                }', '${(
-                                  arrayTickets[0].lista[j].suplementosId) ?
-                                   arrayTickets[0].lista[j].suplementosId.toString() :
-                                    0}', 
+                                }', '${
+                                  arrayTickets[0].lista[j].suplementosId
+                                    ? arrayTickets[0].lista[
+                                        j
+                                      ].suplementosId.toString()
+                                    : 0
+                                }', 
                                     '${
-                                  arrayTickets[0].tipoPago ===
-                                  "CONSUMO_PERSONAL"
-                                    ? idFinalTrabajador
-                                    : campoOtros
-                                }');`;
+                                      arrayTickets[0].tipoPago ===
+                                      "CONSUMO_PERSONAL"
+                                        ? idFinalTrabajador
+                                        : campoOtros
+                                    }');`;
                                 sql += ` INSERT INTO ${nombreTabla} (Botiga, Data, Dependenta, Num_tick, Estat, Plu, Quantitat, Import, Tipus_venta, FormaMarcar, Otros) VALUES (${
                                   parametros.codigoTienda
                                 }, CONVERT(datetime, '${infoTime.year}-${
@@ -438,10 +448,13 @@ class TicketsClass {
                                   "CONSUMO_PERSONAL"
                                     ? "Desc_100"
                                     : "V"
-                                }', '${(
-                                  arrayTickets[0].lista[j].suplementosId) ?
-                                   arrayTickets[0].lista[j].suplementosId.toString() :
-                                    0}', '${
+                                }', '${
+                                  arrayTickets[0].lista[j].suplementosId
+                                    ? arrayTickets[0].lista[
+                                        j
+                                      ].suplementosId.toString()
+                                    : 0
+                                }', '${
                                   arrayTickets[0].tipoPago ===
                                   "CONSUMO_PERSONAL"
                                     ? idFinalTrabajador

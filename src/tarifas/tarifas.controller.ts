@@ -1,8 +1,7 @@
-import { Body, Controller, Get, Req } from "@nestjs/common";
+import { Controller, Get, Req } from "@nestjs/common";
 import { Request } from "express";
 import { authInstance } from "../auth/auth.class";
 import { articulosInstance } from "../articulos/articulos.class";
-import { UtilesModule } from "../utiles/utiles.module";
 
 @Controller("tarifas")
 export class TarifasController {

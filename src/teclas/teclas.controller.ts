@@ -1,23 +1,26 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { teclasInstance } from './teclas.class';
+import { Controller, Get, Req } from "@nestjs/common";
+import { Request } from "express";
+import { authInstance } from "../auth/auth.class";
+import { teclasInstance } from "./teclas.class";
 
-@Controller('teclas')
+@Controller("teclas")
 export class TeclasController {
-    @Post('descargarTeclados')
-    descargarTeclados(@Body() params) {
-        if (params != null || params != undefined) {
-            if (params.database != null || params.database != undefined || params.licencia != null || params.licencia != undefined) {
-                return teclasInstance.getTeclas(params.database, params.licencia).then((res) => {
-                    return { error: false, info: res };
-                }).catch((err) => {
-                    console.log(err);
-                    return { error: true, mensaje: 'SanPedro: Error, teclas/descargarTeclados getTeclas CATCH' };
-                });
-            } else {
-                return { error: true, mensaje: 'SanPedro: Error, teclas/descargarTeclados faltan datos' };
-            }
-        } else {
-            return { error: true, mensaje: 'SanPedro: Error, teclas/descargarTeclados faltan todos los datos' };
-        }
+  @Get("descargarTeclados")
+  async descargarTeclados(@Req() req: Request) {
+    try {
+      const token = authInstance.getToken(req);
+      const parametros = await authInstance.getParametros(token);
+
+      if (parametros) {
+        return await teclasInstance.getTeclas(
+          parametros.database,
+          parametros.licencia
+        );
+      }
+      throw Error("Error, autenticación errónea en teclas/descargarTeclados");
+    } catch (err) {
+      console.log(err);
+      return false;
     }
+  }
 }

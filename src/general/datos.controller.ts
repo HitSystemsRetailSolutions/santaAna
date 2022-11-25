@@ -1,67 +1,74 @@
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Body, Req } from "@nestjs/common";
 import { menusInstance } from "../menus/menus.class";
 import { articulosInstance } from "../articulos/articulos.class";
-import { generalInstance } from "./general.class";
 import { teclasInstance } from "../teclas/teclas.class";
 import { dependientasInstance } from "../trabajadores/trabajadores.class";
 import { familiasInstance } from "../familias/familias.class";
 import { promocionesInstance } from "../promociones/promociones.class";
 import { infoTicketInstance } from "../info-ticket/info-ticket.class";
 import { clientesInstance } from "../clientes/clientes.class";
+import { Request } from "express";
+import { authInstance } from "../auth/auth.class";
 
 @Controller("datos")
 export class DatosController {
-  @Post("test")
-  test(@Body() params) {
-    generalInstance.getCodigoTiendaFromLicencia("Fac_Tena", 842).then((res) => {
-      console.log(res);
-    });
-  }
+  /* Eze 4.0 */
   @Post("cargarTodo")
-  async cargarTodo(@Body() { database, codigoTienda, licencia }) {
+  async cargarTodo(@Body() { codigoTienda }, @Req() req: Request) {
     try {
-      if (database && codigoTienda && licencia) {
-        let articulosAux = await articulosInstance.getArticulos(database);
-        let tarifasEspeciales = await articulosInstance.getTarifaEspecialVieja(
-          database,
-          codigoTienda
-        );
-        const articulos =
-          articulosInstance.fusionarArticulosConTarifasEspeciales(
-            articulosAux,
-            tarifasEspeciales
+      if (codigoTienda) {
+        const token = authInstance.getToken(req);
+        const parametros = await authInstance.getParametros(token);
+        if (parametros) {
+          let articulosAux = await articulosInstance.getArticulos(
+            parametros.database
           );
-        const menus = await menusInstance.getMenus(database, codigoTienda);
-        const teclas = await teclasInstance.getTeclas(database, licencia);
-        const dependientas = await dependientasInstance.getTrabajadores(
-          database
-        );
-        const familias = await familiasInstance.getFamilias(database);
-        const promociones = await promocionesInstance.getPromocionesNueva(
-          database,
-          codigoTienda
-        );
-        const parametrosTicket = await infoTicketInstance.getInfoTicket(
-          database,
-          codigoTienda
-        );
-        const clientes = await clientesInstance.getClientes(database);
-        const dobleMenus = await menusInstance.getDobleMenus(
-          database,
-          codigoTienda
-        );
+          let tarifasEspeciales = await articulosInstance.getTarifasEspeciales(
+            parametros.database
+          );
+          const articulos =
+            articulosInstance.fusionarArticulosConTarifasEspeciales(
+              articulosAux,
+              tarifasEspeciales
+            );
+          const menus = await menusInstance.getMenus(
+            parametros.database,
+            codigoTienda
+          );
+          const teclas = await teclasInstance.getTeclas(
+            parametros.database,
+            parametros.licencia
+          );
+          const dependientas = await dependientasInstance.getTrabajadores(
+            parametros.database
+          );
+          const familias = await familiasInstance.getFamilias(
+            parametros.database
+          );
+          const promociones = await promocionesInstance.getPromocionesNueva(
+            parametros.database,
+            codigoTienda
+          );
+          const parametrosTicket = await infoTicketInstance.getInfoTicket(
+            parametros.database,
+            codigoTienda
+          );
+          const clientes = await clientesInstance.getClientes(
+            parametros.database
+          );
 
-        return {
-          articulos,
-          menus,
-          teclas,
-          dependientas,
-          familias,
-          promociones,
-          parametrosTicket,
-          clientes,
-          dobleMenus,
-        };
+          return {
+            articulos,
+            menus,
+            teclas,
+            dependientas,
+            familias,
+            promociones,
+            parametrosTicket,
+            clientes,
+          };
+        }
+        throw Error("Error, autenticación errónea en datos/cargarTodo");
       }
       throw Error("Error, faltan datos en datos/cargarTodo");
     } catch (err) {
