@@ -8,7 +8,7 @@ export class TestController {
     try {
       throw Error("Error de prueba para el logger con nombre propio");
     } catch (err) {
-      logger.Error(test.name, err);
+      logger.Error(this.test.name, err);
       return false;
     }
   }
