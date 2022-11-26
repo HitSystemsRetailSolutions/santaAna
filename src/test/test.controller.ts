@@ -1,26 +1,14 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Request,
-  Res,
-  HttpStatus,
-} from "@nestjs/common";
-import { authInstance } from "../auth/auth.class";
-import { Response } from "express";
+import { Body, Controller, Get } from "@nestjs/common";
+import { logger } from "../logger/logger.class";
+
 @Controller("test")
 export class TestController {
-  @Post("test")
-  async test(
-    @Body() _params,
-    @Request() req,
-    @Res({ passthrough: true }) res: Response
-  ) {
+  @Get("test")
+  async test(@Body() _params) {
     try {
-      return await authInstance.getParametros(req.headers.authorization);
+      throw Error("Error de prueba para el logger con nombre propio");
     } catch (err) {
-      console.log(err);
-      res.status(HttpStatus.FORBIDDEN);
+      logger.Error(test.name, err);
       return false;
     }
   }
