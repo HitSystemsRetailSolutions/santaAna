@@ -1,5 +1,6 @@
 import { Controller, Get, Req } from "@nestjs/common";
 import { Request } from "express";
+import { logger } from "../logger/logger.class";
 import { authInstance } from "../auth/auth.class";
 import { tarifasInstance } from "../tarifas/tarifas.class";
 
@@ -29,7 +30,7 @@ export class ArticulosController {
         "Error, autenticación errónea en articulos/descargarArticulos"
       );
     } catch (err) {
-      console.log(err);
+      logger.Error("descargarArticulos", err);
       return false;
     }
   }

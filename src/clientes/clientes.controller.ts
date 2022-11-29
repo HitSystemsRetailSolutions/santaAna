@@ -1,9 +1,9 @@
 import { Controller, Post, Body, Get, Req } from "@nestjs/common";
 import { authInstance } from "../auth/auth.class";
 import { UtilesModule } from "../utiles/utiles.module";
-import { articulosInstance } from "../articulos/articulos.class";
 import { clientesInstance } from "./clientes.class";
 import { Request } from "express";
+import { logger } from "../logger/logger.class";
 
 @Controller("clientes")
 export class ClientesController {
@@ -15,13 +15,16 @@ export class ClientesController {
         const token = authInstance.getToken(req);
         const parametros = await authInstance.getParametros(token);
         if (parametros) {
-          return await clientesInstance.getClientConfig(parametros.database, idClienteFinal);
+          return await clientesInstance.getClientConfig(
+            parametros.database,
+            idClienteFinal
+          );
         }
         throw Error("Error, autenticación errónea en clientes/esVip");
       }
       throw Error("Error, faltan datos en clientes/esVip");
     } catch (err) {
-      console.log(err);
+      logger.Error("getClientConfig", err);
       return false;
     }
   }
@@ -35,9 +38,11 @@ export class ClientesController {
       if (parametros) {
         return await clientesInstance.getClientes(parametros.database);
       }
-      throw Error("Error, autenticación errónea en clientes/getClientesFinales");
+      throw Error(
+        "Error, autenticación errónea en clientes/getClientesFinales"
+      );
     } catch (err) {
-      console.log(err);
+      logger.Error("getClientesFinales", err);
       return false;
     }
   }
@@ -58,7 +63,7 @@ export class ClientesController {
       }
       throw Error("Error, autenticación errónea");
     } catch (err) {
-      console.log(err);
+      logger.Error("resetPuntosCliente", err);
       return false;
     }
   }
@@ -80,7 +85,7 @@ export class ClientesController {
       }
       throw Error("Faltan datos en clientes/getPuntosCliente");
     } catch (err) {
-      console.log(err);
+      logger.Error("getPuntosCliente", err);
       return false;
     }
   }
@@ -109,7 +114,7 @@ export class ClientesController {
       }
       throw Error("Faltan datos en clientes/crearNuevoCliente");
     } catch (err) {
-      console.log(err);
+      logger.Error("crearNuevoCliente", err);
       return false;
     }
   }

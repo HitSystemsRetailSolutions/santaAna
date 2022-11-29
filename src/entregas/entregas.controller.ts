@@ -1,23 +1,26 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { entregasInstance } from './entregas.class';
+import { Controller, Get, Req } from "@nestjs/common";
+import { Request } from "express";
+import { authInstance } from "../auth/auth.class";
+import { logger } from "../logger/logger.class";
+import { entregasInstance } from "./entregas.class";
 
-@Controller('entregas')
+@Controller("entregas")
 export class EntregasController {
-    @Post('getEntregas')
-    getEntregas(@Body() params) {
-        if(params.database && params.licencia) {
-            return entregasInstance.getEntregas(params.database, params.licencia).then((res) => {
-                if(res) return { error: false, info: res };
-                return {
-                    error: true,
-                    info: 'Error en newSanPedro - entregas/getEntregas',
-                };
-            });
-        } else {
-            return {
-                error: true,
-                info: 'Faltan datos en newSanPedro - entregas/getEntregas',
-            };
-        }
+  @Get("getEntregas")
+  async getEntregas(@Req() req: Request) {
+    try {
+      const token = authInstance.getToken(req);
+      const parametros = await authInstance.getParametros(token);
+      if (parametros) {
+        return await entregasInstance.getEntregas(
+          parametros.database,
+          parametros.licencia
+        );
+      }
+      throw Error("Error, autenticación errónea en getEntregas");
+    } catch (err) {
+      logger.Error("getEntregas", err);
+      return false;
     }
+  }
 }
