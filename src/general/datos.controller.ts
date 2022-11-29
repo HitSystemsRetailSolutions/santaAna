@@ -24,13 +24,15 @@ export class DatosController {
           let articulosAux = await articulosInstance.getArticulos(
             parametros.database
           );
-          let tarifasEspeciales = await tarifasInstance.getTarifasEspeciales(
-            parametros.database
+          let tarifaTienda = await tarifasInstance.getTarifaTienda(
+            parametros.database,
+            codigoTienda
           );
+
           const articulos =
             articulosInstance.fusionarArticulosConTarifasEspeciales(
               articulosAux,
-              tarifasEspeciales
+              tarifaTienda
             );
           const menus = await menusInstance.getMenus(
             parametros.database,
@@ -57,7 +59,9 @@ export class DatosController {
           const clientes = await clientesInstance.getClientes(
             parametros.database
           );
-
+          const tarifasEspeciales = await tarifasInstance.getTarifasEspeciales(
+            parametros.database
+          );
           return {
             articulos,
             menus,
@@ -67,6 +71,7 @@ export class DatosController {
             promociones,
             parametrosTicket,
             clientes,
+            tarifasEspeciales,
           };
         }
         throw Error("Error, autenticación errónea en datos/cargarTodo");

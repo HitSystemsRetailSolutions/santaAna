@@ -12,25 +12,18 @@ export class ParametrosController {
   @Post("instaladorLicencia")
   async instaladorLicencia(@Body() { password, numLlicencia }) {
     try {
-      logger.Error("TRACIZA 1");
       if (password && numLlicencia) {
-        logger.Error("TRACIZA 2");
         if (password === PASSWORD_INSTALLWIZARD) {
-          logger.Error("TRACIZA 3");
           const sqlParaImprimir = `SELECT ll.Llicencia, ll.Empresa, ll.LastAccess, we.Db, ISNULL(ti.ultimoIdTicket, 0) as ultimoIdTicket, ti.token FROM llicencies ll LEFT JOIN Web_Empreses we ON ll.Empresa = we.Nom LEFT JOIN tocGameInfo ti ON ti.licencia = ${numLlicencia} WHERE ll.Llicencia = ${numLlicencia}`;
           const res1 = await recHit("Hit", sqlParaImprimir);
-          logger.Error("TRACIZA 4");
           const sqlParaImprimir2 = `SELECT Nom, Codi as codigoTienda FROM clients WHERE Codi = (SELECT Valor1 FROM ParamsHw WHERE Codi = ${res1.recordset[0].Llicencia})`;
           const data2 = await recHit(res1.recordset[0].Db, sqlParaImprimir2);
-          logger.Error("TRACIZA 5");
 
           if (res1.recordset.length === 1) {
-            logger.Error("TRACIZA 6");
             const dataF = await recHit(
               res1.recordset[0].Db,
               `SELECT * FROM paramstpv WHERE CodiClient = ${res1.recordset[0].Llicencia} `
             );
-            logger.Error("TRACIZA 7");
 
             let paramstpv = {};
 
@@ -40,7 +33,7 @@ export class ParametrosController {
                   dataF.recordset[index].Valor;
               }
             }
-            logger.Error("TRACIZA 8");
+
             return {
               licencia: parseInt(res1.recordset[0].Llicencia),
               nombreEmpresa: res1.recordset[0].Empresa,
