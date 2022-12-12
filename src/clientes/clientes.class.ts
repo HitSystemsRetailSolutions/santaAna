@@ -114,7 +114,7 @@ export class Clientes {
     for (let i = 0; i < clientesAlbaran.length; i++) {
       for (let j = 0; j < allClients.length; j++) {
         if (clientesAlbaran[i].idCliente === allClients[j].id) {
-          arrayFinalClientes.push({
+          allClients[j] = {
             albaran: true,
             id: clientesAlbaran[i].idCliente,
             nombre: clientesAlbaran[i].nombre,
@@ -123,7 +123,7 @@ export class Clientes {
                 ? true
                 : false,
             tarjetaCliente: clientesAlbaran[i].idTarjeta,
-          });
+          };
           break;
         }
       }
@@ -137,7 +137,7 @@ export class Clientes {
       });
     }
 
-    return arrayFinalClientes;
+    return allClients.concat(arrayFinalClientes);
   }
 
   /* Eze 4.0 */
