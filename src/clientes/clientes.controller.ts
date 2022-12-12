@@ -124,4 +124,29 @@ export class ClientesController {
       return false;
     }
   }
+
+  @Post("descontarPuntos")
+  async descontarPuntosCliente(
+    @Body() { idCliente, puntos },
+    @Req() req: Request
+  ) {
+    try {
+      if (idCliente && puntos) {
+        const token = authInstance.getToken(req);
+        const parametros = await authInstance.getParametros(token);
+        if (parametros) {
+          return await clientesInstance.descontarPuntos(
+            parametros.database,
+            idCliente,
+            puntos
+          );
+        }
+        throw Error("Autenticación incorrecta en clientes/descontarPuntos");
+      }
+      throw Error("Faltan datos en clientes/descontarPuntos");
+    } catch (err) {
+      logger.Error("clientes/descontarPuntos", err);
+      return false;
+    }
+  }
 }

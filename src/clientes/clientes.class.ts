@@ -187,5 +187,18 @@ export class Clientes {
     }
     return false;
   }
+
+  /* Eze 4.0 */
+  async descontarPuntos(
+    database: ParametrosInterface["database"],
+    idCliente: ClientesInterface["id"],
+    puntos: number
+  ) {
+    await recHit(
+      database,
+      `UPDATE punts SET Punts = Punts - ${puntos} where idClient = '${idCliente}'`
+    );
+    return true;
+  }
 }
 export const clientesInstance = new Clientes();
