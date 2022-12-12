@@ -118,4 +118,19 @@ export class ClientesController {
       return false;
     }
   }
+
+  /* Eze 4.0 */
+  @Get("getClientesAlbaran")
+  async getClientesAlbaran(@Req() req: Request) {
+    try {
+      const token = authInstance.getToken(req);
+      const parametros = await authInstance.getParametros(token);
+      if (parametros) {
+        return await clientesInstance.getClientesAlbaran(parametros.database);
+      }
+      throw Error("Autenticación incorrecta en clientes/getClientesAlbaran");
+    } catch (err) {
+      logger.Error("clientes/getClientesAlbaran", err);
+    }
+  }
 }
