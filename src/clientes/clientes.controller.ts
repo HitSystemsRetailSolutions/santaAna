@@ -36,7 +36,13 @@ export class ClientesController {
       const token = authInstance.getToken(req);
       const parametros = await authInstance.getParametros(token);
       if (parametros) {
-        return await clientesInstance.getClientes(parametros.database);
+        const allClients = await clientesInstance.getClientes(
+          parametros.database
+        );
+        const clientesAlbaran = await clientesInstance.getClientesAlbaran(
+          parametros.database
+        );
+        return clientesInstance.fusionarClientes(allClients, clientesAlbaran);
       }
       throw Error(
         "Error, autenticación errónea en clientes/getClientesFinales"
@@ -116,21 +122,6 @@ export class ClientesController {
     } catch (err) {
       logger.Error("crearNuevoCliente", err);
       return false;
-    }
-  }
-
-  /* Eze 4.0 */
-  @Get("getClientesAlbaran")
-  async getClientesAlbaran(@Req() req: Request) {
-    try {
-      const token = authInstance.getToken(req);
-      const parametros = await authInstance.getParametros(token);
-      if (parametros) {
-        return await clientesInstance.getClientesAlbaran(parametros.database);
-      }
-      throw Error("Autenticación incorrecta en clientes/getClientesAlbaran");
-    } catch (err) {
-      logger.Error("clientes/getClientesAlbaran", err);
     }
   }
 }

@@ -1,5 +1,9 @@
 import { ParametrosInterface } from "../parametros/parametros.interface";
 import { recHit } from "../conexion/mssql";
+import {
+  ClientesInterface,
+  ClientesAlbaranInterface,
+} from "./clientes.interface";
 
 export class Clientes {
   /* Eze 4.0 */
@@ -76,7 +80,7 @@ export class Clientes {
   }
 
   /* Eze 4.0 */
-  async getClientes(database: string) {
+  async getClientes(database: string): Promise<ClientesInterface[]> {
     const res = await recHit(
       database,
       "select Id as id, Nom as nombre, IdExterna as tarjetaCliente from ClientsFinals WHERE Id IS NOT NULL AND Id <> ''"
@@ -85,6 +89,55 @@ export class Clientes {
       return res.recordset;
     }
     return null;
+  }
+
+  /* Eze 4.0 */
+  async getClientesAlbaran(
+    database: ParametrosInterface["database"]
+  ): Promise<ClientesAlbaranInterface[]> {
+    const resultado = await recHit(
+      database,
+      `SELECT cc1.Codi, cc2.Valor as idCliente, ISNULL(cc3.Valor, 1) as pagaEnTienda, cf.Nom as nombre, cf.IdExterna as idTarjeta FROM ConstantsClient cc1 LEFT JOIN ConstantsClient cc2 ON cc1.Codi = cc2.Codi AND cc2.Variable = 'CFINAL' LEFT JOIN ConstantsClient cc3 ON cc3.Codi = cc1.Codi AND cc3.Variable = 'NoPagaEnTienda' LEFT JOIN ClientsFinals cf ON cc2.Valor = cf.Id  WHERE cc1.Variable = 'EsClient' AND cc1.Valor = 'EsClient' AND cc2.Valor <> ''
+    `
+    );
+
+    return resultado.recordset;
+  }
+
+  /* Eze 4.0 */
+  fusionarClientes(
+    allClients: ClientesInterface[],
+    clientesAlbaran: ClientesAlbaranInterface[]
+  ): ClientesInterface[] {
+    const arrayFinalClientes: ClientesInterface[] = [];
+
+    for (let i = 0; i < clientesAlbaran.length; i++) {
+      for (let j = 0; j < allClients.length; j++) {
+        if (clientesAlbaran[i].idCliente === allClients[j].id) {
+          arrayFinalClientes.push({
+            albaran: true,
+            id: clientesAlbaran[i].idCliente,
+            nombre: clientesAlbaran[i].nombre,
+            noPagaEnTienda:
+              clientesAlbaran[i].pagaEnTienda === "NoPagaEnTienda"
+                ? true
+                : false,
+            tarjetaCliente: clientesAlbaran[i].idTarjeta,
+          });
+          break;
+        }
+      }
+      arrayFinalClientes.push({
+        albaran: true,
+        id: clientesAlbaran[i].idCliente,
+        nombre: clientesAlbaran[i].nombre,
+        noPagaEnTienda:
+          clientesAlbaran[i].pagaEnTienda === "NoPagaEnTienda" ? true : false,
+        tarjetaCliente: clientesAlbaran[i].idTarjeta,
+      });
+    }
+
+    return arrayFinalClientes;
   }
 
   /* Eze 4.0 */
@@ -143,17 +196,6 @@ export class Clientes {
       }
     }
     return false;
-  }
-
-  /* Eze 4.0 */
-  async getClientesAlbaran(database: ParametrosInterface["database"]) {
-    const resultado = await recHit(
-      database,
-      `SELECT cc1.Codi, cc1.Valor as albaran, cc2.Valor as idCliente, ISNULL(cc3.Valor, 1) as pagaEnTienda, cf.Nom as nombre, cf.IdExterna as idTarjeta FROM ConstantsClient cc1 LEFT JOIN ConstantsClient cc2 ON cc1.Codi = cc2.Codi AND cc2.Variable = 'CFINAL' LEFT JOIN ConstantsClient cc3 ON cc3.Codi = cc1.Codi AND cc3.Variable = 'NoPagaEnTienda' LEFT JOIN ClientsFinals cf ON cc2.Valor = cf.Id  WHERE cc1.Variable = 'EsClient' AND cc1.Valor = 'EsClient' AND cc2.Valor <> ''
-    `
-    );
-
-    return resultado.recordset;
   }
 }
 export const clientesInstance = new Clientes();
