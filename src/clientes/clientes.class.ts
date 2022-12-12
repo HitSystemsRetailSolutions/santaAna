@@ -109,8 +109,6 @@ export class Clientes {
     allClients: ClientesInterface[],
     clientesAlbaran: ClientesAlbaranInterface[]
   ): ClientesInterface[] {
-    const arrayFinalClientes: ClientesInterface[] = [];
-
     for (let i = 0; i < clientesAlbaran.length; i++) {
       for (let j = 0; j < allClients.length; j++) {
         if (clientesAlbaran[i].idCliente === allClients[j].id) {
@@ -127,17 +125,9 @@ export class Clientes {
           break;
         }
       }
-      arrayFinalClientes.push({
-        albaran: true,
-        id: clientesAlbaran[i].idCliente,
-        nombre: clientesAlbaran[i].nombre,
-        noPagaEnTienda:
-          clientesAlbaran[i].pagaEnTienda === "NoPagaEnTienda" ? true : false,
-        tarjetaCliente: clientesAlbaran[i].idTarjeta,
-      });
     }
 
-    return allClients.concat(arrayFinalClientes);
+    return allClients;
   }
 
   /* Eze 4.0 */
