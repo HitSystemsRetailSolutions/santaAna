@@ -56,9 +56,20 @@ export class DatosController {
             parametros.database,
             codigoTienda
           );
-          const clientes = await clientesInstance.getClientes(
+
+          const allClients = await clientesInstance.getClientes(
             parametros.database
           );
+
+          const clientesAlbaran = await clientesInstance.getClientesAlbaran(
+            parametros.database
+          );
+
+          const clientes = clientesInstance.fusionarClientes(
+            allClients,
+            clientesAlbaran
+          );
+
           const tarifasEspeciales = await tarifasInstance.getTarifasEspeciales(
             parametros.database
           );
