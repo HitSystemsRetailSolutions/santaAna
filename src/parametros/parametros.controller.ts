@@ -13,41 +13,9 @@ export class ParametrosController {
   async instaladorLicencia(@Body() { password, numLlicencia }) {
     try {
       if (password && numLlicencia) {
-        if (password === PASSWORD_INSTALLWIZARD) {
-          const sqlParaImprimir = `SELECT ll.Llicencia, ll.Empresa, ll.LastAccess, we.Db, ISNULL(ti.ultimoIdTicket, 0) as ultimoIdTicket, ti.token FROM llicencies ll LEFT JOIN Web_Empreses we ON ll.Empresa = we.Nom LEFT JOIN tocGameInfo ti ON ti.licencia = ${numLlicencia} WHERE ll.Llicencia = ${numLlicencia}`;
-          const res1 = await recHit("Hit", sqlParaImprimir);
-          const sqlParaImprimir2 = `SELECT cl.Nom, cl.Codi as codigoTienda, pt.Valor as header, pt2.Valor as footer FROM clients cl LEFT JOIN paramsTpv pt ON cl.Codi = pt.CodiClient AND pt.Variable = 'Capselera_1' LEFT JOIN ParamsTpv pt2 ON cl.Codi = pt2.CodiClient AND pt2.Variable = 'Capselera_2' WHERE cl.Codi = (SELECT Valor1 FROM ParamsHw WHERE Codi = ${res1.recordset[0].Llicencia})`;
-          const data2 = await recHit(res1.recordset[0].Db, sqlParaImprimir2);
+        if (password === PASSWORD_INSTALLWIZARD)
+          return await parametrosInstance.getParametros(numLlicencia);
 
-          if (res1.recordset.length === 1) {
-            const dataF = await recHit(
-              res1.recordset[0].Db,
-              `SELECT * FROM paramstpv WHERE CodiClient = ${res1.recordset[0].Llicencia} `
-            );
-
-            let paramstpv = {};
-
-            for (let index = 0; index < dataF.recordset.length; index++) {
-              if (dataF.recordset[index].Valor == "Si") {
-                paramstpv[dataF.recordset[index].Variable] =
-                  dataF.recordset[index].Valor;
-              }
-            }
-
-            return {
-              licencia: parseInt(res1.recordset[0].Llicencia),
-              nombreEmpresa: res1.recordset[0].Empresa,
-              database: res1.recordset[0].Db,
-              nombreTienda: data2.recordset[0].Nom,
-              codigoTienda: data2.recordset[0].codigoTienda,
-              ultimoTicket: res1.recordset[0].ultimoIdTicket,
-              header: data2.recordset[0].header,
-              footer: data2.recordset[0].footer,
-              ...paramstpv,
-              token: res1.recordset[0].token,
-            };
-          }
-        }
         throw Error("Error en la autenticación del servidor");
       }
       throw Error("Error, faltan datos en parametros/instaladorLicencia");
@@ -64,7 +32,7 @@ export class ParametrosController {
       const token = authInstance.getToken(req);
       const parametros = await authInstance.getParametros(token);
       if (parametros) {
-        return await parametrosInstance.getParametros(parametros);
+        return await parametrosInstance.getParametros(parametros.licencia);
       }
       throw Error("Error, autenticación errónea en parametros/getParametros");
     } catch (err) {
