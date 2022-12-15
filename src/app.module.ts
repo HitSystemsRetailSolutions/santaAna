@@ -9,7 +9,6 @@ import { TeclasController } from "./teclas/teclas.controller";
 import { TrabajadoresController } from "./trabajadores/trabajadores.controller";
 import { FamiliasController } from "./familias/familias.controller";
 import { PromocionesController } from "./promociones/promociones.controller";
-import { InfoTicketController } from "./info-ticket/info-ticket.controller";
 import { SocketsGateway } from "./sockets.gateway";
 import { TestController } from "./test/test.controller";
 import { UtilesModule } from "./utiles/utiles.module";
@@ -36,7 +35,6 @@ import { TarifasController } from "./tarifas/tarifas.controller";
     TrabajadoresController,
     FamiliasController,
     PromocionesController,
-    InfoTicketController,
     TestController,
     EntregasController,
     ImpresorasIpController,

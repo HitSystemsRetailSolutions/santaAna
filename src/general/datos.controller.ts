@@ -5,7 +5,6 @@ import { teclasInstance } from "../teclas/teclas.class";
 import { dependientasInstance } from "../trabajadores/trabajadores.class";
 import { familiasInstance } from "../familias/familias.class";
 import { promocionesInstance } from "../promociones/promociones.class";
-import { infoTicketInstance } from "../info-ticket/info-ticket.class";
 import { clientesInstance } from "../clientes/clientes.class";
 import { Request } from "express";
 import { authInstance } from "../auth/auth.class";
@@ -52,10 +51,6 @@ export class DatosController {
             parametros.database,
             codigoTienda
           );
-          const parametrosTicket = await infoTicketInstance.getInfoTicket(
-            parametros.database,
-            codigoTienda
-          );
 
           const allClients = await clientesInstance.getClientes(
             parametros.database
@@ -80,7 +75,6 @@ export class DatosController {
             dependientas,
             familias,
             promociones,
-            parametrosTicket,
             clientes,
             tarifasEspeciales,
           };
