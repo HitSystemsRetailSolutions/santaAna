@@ -19,6 +19,7 @@ export class DatosController {
       if (codigoTienda) {
         const token = authInstance.getToken(req);
         const parametros = await authInstance.getParametros(token);
+        console.log(token, parametros);
         if (parametros) {
           let articulosAux = await articulosInstance.getArticulos(
             parametros.database
