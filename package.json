@@ -32,7 +32,7 @@
     "firebase-admin": "^10.1.0",
     "moment": "^2.29.3",
     "mongodb": "^4.3.0",
-    "mssql": "^5.1.0",
+    "mssql": "^9.0.1",
     "node-file-logger": "^0.9.5",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

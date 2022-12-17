@@ -1,5 +1,5 @@
 import { Body, Controller, Get } from "@nestjs/common";
-import { recHit } from "src/conexion/mssql";
+import { recHit } from "../conexion/mssql";
 import { logger } from "../logger/logger.class";
 
 @Controller("test")

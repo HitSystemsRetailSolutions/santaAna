@@ -1,7 +1,5 @@
 import { recHit } from "../conexion/mssql";
 import { fechaParaSqlServer } from "src/funciones/fechas";
-import { logger } from "../logger/logger.class";
-import { ParametrosInterface } from "../parametros/parametros.interface";
 import { SuperTicketInterface, TicketsInterface } from "./tickets.interface";
 import { TokensCollection } from "../auth/auth.interface";
 
@@ -31,7 +29,8 @@ class TicketsClass {
       database,
       `SELECT valor FROM dependentesExtes WHERE id = ${idTrabajador} AND nom = 'CODICFINAL'`
     );
-    if (res.recordset > 0) return res.recordset[0].valor;
+
+    if (res.recordset.length > 0) return res.recordset[0].valor;
     return null;
   }
 
@@ -87,7 +86,8 @@ class TicketsClass {
                     DELETE FROM ${nombreTabla} WHERE botiga = ${parametros.codigoInternoTienda} AND Num_tick = ${ticket._id};
                     ${sql}
                 `;
-    await recHit(parametros.database, sql);
+    const resSql = await recHit(parametros.database, sql);
+    resSql.rowsAffected;
     console.log(9);
     await this.actualizarUltimo(parametros, ticket._id);
     console.log(10);
