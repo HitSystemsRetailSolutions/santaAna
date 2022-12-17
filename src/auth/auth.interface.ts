@@ -3,4 +3,5 @@ export interface TokensCollection {
   database: string;
   licencia: number;
   codigoInternoTienda: number;
+  nombreTienda: string;
 }

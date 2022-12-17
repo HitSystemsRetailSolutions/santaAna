@@ -13,7 +13,8 @@ export async function addToken(
   token: TokensCollection["token"],
   database: TokensCollection["database"],
   licencia: TokensCollection["licencia"],
-  codigoInternoTienda: TokensCollection["codigoInternoTienda"]
+  codigoInternoTienda: TokensCollection["codigoInternoTienda"],
+  nombreTienda: TokensCollection["nombreTienda"]
 ) {
   const db = await getDb();
   const tokensCollection = db.collection<TokensCollection>("tokens");
@@ -23,6 +24,7 @@ export async function addToken(
       database,
       licencia,
       codigoInternoTienda,
+      nombreTienda,
     })
   ).acknowledged;
 }
