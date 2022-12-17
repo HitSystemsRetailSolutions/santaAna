@@ -3,11 +3,15 @@ import { Request } from "express";
 import { logger } from "../logger/logger.class";
 import { authInstance } from "../auth/auth.class";
 import { ticketsInstance } from "./tickets.class";
+import { SuperTicketInterface } from "./tickets.interface";
 
 @Controller("tickets")
 export class TicketsController {
   @Post("enviarTicket")
-  async enviarTicket(@Body() { ticket }, @Req() req: Request) {
+  async enviarTicket(
+    @Body() { ticket }: { ticket: SuperTicketInterface },
+    @Req() req: Request
+  ) {
     try {
       const token = authInstance.getToken(req);
       const parametros = await authInstance.getParametros(token);
