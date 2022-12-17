@@ -17,7 +17,7 @@ export class TicketsController {
       const parametros = await authInstance.getParametros(token);
 
       if (parametros)
-        await ticketsInstance.insertarTicketsNueva(ticket, parametros);
+        return await ticketsInstance.insertarTicketsNueva(ticket, parametros);
 
       throw Error("Error en la autenticación de tickets/enviarTicket");
     } catch (err) {
