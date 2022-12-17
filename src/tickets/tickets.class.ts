@@ -73,19 +73,24 @@ class TicketsClass {
                     ${sql}
                 `;
     await recHit(parametros.database, sql);
+    await this.actualizarUltimo(parametros, ticket._id);
+    return true;
+  }
 
-    ticket.enviado = true;
+  /* Eze 4.0 */
+  async actualizarUltimo(
+    parametros: TokensCollection,
+    idTicket: TicketsInterface["_id"]
+  ) {
     const sql2 = `IF EXISTS (SELECT * FROM tocGameInfo WHERE licencia = ${
       parametros.licencia
     }) 
           BEGIN
               IF ((SELECT ultimoIdTicket FROM tocGameInfo WHERE licencia = ${
                 parametros.licencia
-              }) < ${ticket._id})
+              }) < ${idTicket})
                   BEGIN
-                      UPDATE tocGameInfo SET ultimoIdTicket = ${
-                        ticket._id
-                      }, ultimaConexion = ${Date.now()}, nombreTienda = '${
+                      UPDATE tocGameInfo SET ultimoIdTicket = ${idTicket}, ultimaConexion = ${Date.now()}, nombreTienda = '${
       parametros.nombreTienda
     }' WHERE licencia = ${parametros.licencia}
                     END
@@ -93,15 +98,13 @@ class TicketsClass {
         ELSE
             BEGIN
                 INSERT INTO tocGameInfo (licencia, bbdd, ultimoIdTicket, codigoInternoTienda, nombreTienda, token, version, ultimaConexion) 
-                    VALUES (${parametros.licencia}, '${parametros.database}', ${
-      ticket._id
-    }, ${parametros.codigoInternoTienda}, '${
+                    VALUES (${parametros.licencia}, '${
+      parametros.database
+    }', ${idTicket}, ${parametros.codigoInternoTienda}, '${
       parametros.nombreTienda
     }', NEWID(), '4.0.0', ${Date.now()})
                                         END`;
     await recHit("Hit", sql2);
-
-    return true;
   }
 }
 const ticketsInstance = new TicketsClass();
