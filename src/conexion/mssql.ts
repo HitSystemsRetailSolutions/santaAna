@@ -1,7 +1,10 @@
 const sql = require("mssql");
 import { PASSWORD_SERVER, URL_SERVER, USER_SERVER } from "../secrets";
 
-export function recHit(database: string, consultaSQL: string): Promise<any> {
+export async function recHit(
+  database: string,
+  consultaSQL: string
+): Promise<any> {
   const config = {
     user: USER_SERVER,
     password: PASSWORD_SERVER,
@@ -14,31 +17,26 @@ export function recHit(database: string, consultaSQL: string): Promise<any> {
     },
     requestTimeout: 10000,
   };
-  const devolver = new Promise((dev, rej) => {
-    new sql.ConnectionPool(config)
-      .connect()
-      .then((pool) => {
-        return pool.request().query(consultaSQL);
-      })
-      .then((result) => {
-        dev(result);
-        sql.close();
-      })
-      .catch((err) => {
-        if (database.toLowerCase() === "fac_tena") {
-          console.log(err);
-          console.log("SQL: ", consultaSQL);
-        }
 
-        sql.close();
-      });
-  });
-  return devolver;
+  const pool = await new sql.ConnectionPool(config).connect();
+
+  const result = await pool.request().query(consultaSQL);
+  sql.close();
+  return result;
+
+  // .catch((err) => {
+  //   if (database.toLowerCase() === "fac_tena") {
+  //     console.log(err);
+  //     console.log("SQL: ", consultaSQL);
+  //   }
+
+  //   sql.close();
+  // });
 }
 
-sql.on("error", (err) => {
-  console.log("Evento error SQL: ", err);
-});
+// sql.on("error", (err) => {
+//   console.log("Evento error SQL: ", err);
+// });
 
 // export function recHit(database: string, query: string) {
 //   const configNueva = {

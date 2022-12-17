@@ -22,6 +22,19 @@ class TicketsClass {
     return campoOtros;
   }
 
+  /* Eze 4.0 */
+  async getIdEspecialTrabajador(
+    database: TokensCollection["database"],
+    idTrabajador: SuperTicketInterface["idTrabajador"]
+  ): Promise<string> {
+    const res = await recHit(
+      database,
+      `SELECT valor FROM dependentesExtes WHERE id = ${idTrabajador} AND nom = 'CODICFINAL'`
+    );
+    if (res.recordset > 0) return res.recordset[0].valor;
+    return null;
+  }
+
   /* Eze 4.0 preparando */
   async insertarTicketsNueva(
     ticket: SuperTicketInterface,
@@ -36,20 +49,18 @@ class TicketsClass {
     for (let j = 0; j < ticket.cesta.lista.length; j++) {
       const campoOtros = this.construirCampoOtros(ticket);
 
-      /* Inicio consumo personal. En Hit no se utiliza el id normal del trabajador para el consumo personal */
-      let idFinalTrabajadorAux = null;
       let idFinalTrabajador = null;
 
       if (ticket.tipoPago === "CONSUMO_PERSONAL") {
-        idFinalTrabajadorAux = await recHit(
+        const idEspecial = await this.getIdEspecialTrabajador(
           parametros.database,
-          `SELECT valor FROM dependentesExtes WHERE id = ${ticket.idTrabajador} AND nom = 'CODICFINAL'`
+          ticket.idTrabajador
         );
-        idFinalTrabajador = `[Id:${idFinalTrabajadorAux.recordset[0].valor}]`;
+        if (idEspecial) idFinalTrabajador = `[Id:${idEspecial}]`;
+        else
+          throw Error("No se ha podido obtener el idEspecial del trabajador");
       }
-      /* Final consumo personal */
 
-      /* Obtener el ID a insertar, si es tipo promocion combo, habrá dos inserts. El campo es 'plu' */
       let idArticulo = null;
 
       idArticulo = ticket.cesta.lista[j].idArticulo;
