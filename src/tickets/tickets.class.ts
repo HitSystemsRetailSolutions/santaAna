@@ -39,33 +39,26 @@ class TicketsClass {
     ticket: SuperTicketInterface,
     parametros: TokensCollection
   ) {
-    console.log(1);
     let sql = "";
 
     const infoTime = fechaParaSqlServer(new Date(ticket.timestamp));
     const nombreTabla = `[V_Venut_${infoTime.year}-${infoTime.month}]`;
-    console.log(2);
     /* Recorro la cesta del ticket */
     for (let j = 0; j < ticket.cesta.lista.length; j++) {
-      console.log(3);
       const campoOtros = this.construirCampoOtros(ticket);
 
       let idFinalTrabajador = null;
-      console.log(4);
       if (ticket.tipoPago === "CONSUMO_PERSONAL") {
-        console.log(5);
         const idEspecial = await this.getIdEspecialTrabajador(
           parametros.database,
           ticket.idTrabajador
         );
-        console.log(6);
         if (idEspecial) idFinalTrabajador = `[Id:${idEspecial}]`;
         else
           throw Error("No se ha podido obtener el idEspecial del trabajador");
       }
 
       let idArticulo = null;
-      console.log(7);
       idArticulo = ticket.cesta.lista[j].idArticulo;
       sql += ` INSERT INTO ${nombreTabla} (Botiga, Data, Dependenta, Num_tick, Estat, Plu, Quantitat, Import, Tipus_venta, FormaMarcar, Otros) VALUES (${
         parametros.codigoInternoTienda
@@ -81,16 +74,13 @@ class TicketsClass {
         ticket.tipoPago === "CONSUMO_PERSONAL" ? idFinalTrabajador : campoOtros
       }');`;
     }
-    console.log(8);
     sql = `
                     DELETE FROM ${nombreTabla} WHERE botiga = ${parametros.codigoInternoTienda} AND Num_tick = ${ticket._id};
                     ${sql}
                 `;
     const resSql = await recHit(parametros.database, sql);
     resSql.rowsAffected;
-    console.log(9);
     await this.actualizarUltimo(parametros, ticket._id);
-    console.log(10);
     return true;
   }
 
