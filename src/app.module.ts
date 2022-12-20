@@ -18,6 +18,7 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 import { TarifasController } from "./tarifas/tarifas.controller";
 import { TicketsController } from './tickets/tickets.controller';
+import { CajasController } from './cajas/cajas.controller';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { TicketsController } from './tickets/tickets.controller';
     ImpresorasIpController,
     TarifasController,
     TicketsController,
+    CajasController,
   ],
   providers: [AppService, SocketsGateway],
 })

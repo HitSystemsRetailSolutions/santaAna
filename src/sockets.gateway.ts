@@ -21,43 +21,7 @@ import { Socket } from "dgram";
   allowEIO3: true,
 })
 export class SocketsGateway {
-  // @WebSocketServer()
-  // server;
-
-  @SubscribeMessage("ezequiel")
-  async elTesteo(@MessageBody() params, @ConnectedSocket() client: Socket) {
-    client.emit("resEzequiel", { test: params.elNumero });
-    // client.emit('resEzequiel', {test: params.elNumero});
-  }
-
-  /* Controlador de sincronizar las cajas */
-  @SubscribeMessage("sincroCajas")
-  async insertarCajas(
-    @MessageBody() params,
-    @ConnectedSocket() client: Socket
-  ) {
-    if (params != undefined) {
-      if (
-        params.infoCaja != undefined &&
-        params.infoCaja != null &&
-        params.parametros != undefined &&
-        params.parametros != null
-      ) {
-        cajasInstance.insertarCajas(params.parametros, params.infoCaja, client);
-      } else {
-        client.emit("resCajas", {
-          error: true,
-          mensaje: "SanPedro: infoCaja o parametros indefinidos o null",
-        });
-      }
-    } else {
-      client.emit("resCajas", {
-        error: true,
-        mensaje: "SanPedro: Error en sockets > sincroCajas. ¡Faltan datos!",
-      });
-    }
-  }
-
+  
   /* Controlador de movimientos */
   @SubscribeMessage("sincroMovimientos")
   async insertarMovimientos(
