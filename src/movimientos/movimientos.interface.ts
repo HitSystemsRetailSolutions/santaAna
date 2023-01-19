@@ -15,6 +15,7 @@ export type TiposMovientos =
   | "DEUDA"
   | "ENTREGA_DIARIA"
   | "ENTRADA_DINERO"
+  | "SALIDA"
   | "DATAFONO_3G";
 
 export type FormaPago =

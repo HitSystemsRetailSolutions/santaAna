@@ -21,40 +21,6 @@ import { Socket } from "dgram";
   allowEIO3: true,
 })
 export class SocketsGateway {
-  
-  /* Controlador de movimientos */
-  @SubscribeMessage("sincroMovimientos")
-  async insertarMovimientos(
-    @MessageBody() params,
-    @ConnectedSocket() client: Socket
-  ) {
-    if (params != undefined) {
-      if (
-        params.movimiento != undefined &&
-        params.movimiento != null &&
-        params.parametros != undefined &&
-        params.parametros != null
-      ) {
-        movimientosInstance.insertarMovimiento(
-          params.parametros,
-          params.movimiento,
-          client
-        );
-      } else {
-        client.emit("resMovimientos", {
-          error: true,
-          mensaje: "SanPedro: movimiento o parametros indefinidos o null",
-        });
-      }
-    } else {
-      client.emit("resMovimientos", {
-        error: true,
-        mensaje:
-          "SanPedro: Error en sockets > sincroMovimientos. ¡Faltan datos!",
-      });
-    }
-  }
-
   /* Controlador de sincronizar las devoluciones */
   @SubscribeMessage("sincroDevoluciones")
   async insertarDevoluciones(

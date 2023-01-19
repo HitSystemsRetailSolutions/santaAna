@@ -19,6 +19,7 @@ import { join } from "path";
 import { TarifasController } from "./tarifas/tarifas.controller";
 import { TicketsController } from './tickets/tickets.controller';
 import { CajasController } from './cajas/cajas.controller';
+import { MovimientosController } from './movimientos/movimientos.controller';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { CajasController } from './cajas/cajas.controller';
     TarifasController,
     TicketsController,
     CajasController,
+    MovimientosController,
   ],
   providers: [AppService, SocketsGateway],
 })

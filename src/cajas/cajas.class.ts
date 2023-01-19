@@ -1,5 +1,6 @@
 import { TokensCollection } from "src/auth/auth.interface";
 import { recHit } from "src/conexion/mssql";
+import { logger } from "src/logger/logger.class";
 import { fechaParaSqlServer } from "../funciones/fechas";
 import { CajaSincro } from "./cajas.interface";
 
@@ -139,12 +140,27 @@ class CajasClass {
               resSqlRepeticion.recordset[0].mensaje == "Ya existe o es antigua")
           ) {
             const aux = await recHit(parametros.database, sqlCompleta);
-            if (aux.rowsAffected.length > 0) return true;
+            if (aux.rowsAffected.length > 0) {
+              this.guardar3G(infoCaja.totalDatafono3G, parametros.nombreTienda);
+              return true;
+            }
           }
         }
       }
     }
     return false;
+  }
+
+  /* Función que pide Jesus temporalmente (3G) */
+  async guardar3G(cantidad3G: number, nombreTienda: string) {
+    try {
+      const sql = `
+      INSERT INTO info_datafono_manual (tienda, cantidad) VALUES ('${nombreTienda}', ${cantidad3G})
+      `;
+      await recHit("Fac_Tena", sql);
+    } catch (err) {
+      logger.Error("cajas.class/enviarCorreo", err.message);
+    }
   }
 }
 const cajasInstance = new CajasClass();
