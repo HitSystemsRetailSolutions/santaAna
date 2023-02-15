@@ -48,7 +48,7 @@ class TicketsClass {
       const campoOtros = this.construirCampoOtros(ticket);
 
       let idFinalTrabajador = null;
-      if (ticket.tipoPago === "CONSUMO_PERSONAL") {
+      if (ticket.cesta.modo === "CONSUMO_PERSONAL") {
         const idEspecial = await this.getIdEspecialTrabajador(
           parametros.database,
           ticket.idTrabajador
@@ -67,11 +67,11 @@ class TicketsClass {
       } ${infoTime.hours}:${infoTime.minutes}:${infoTime.seconds}', 120), ${
         ticket.idTrabajador
       }, ${ticket._id}, '', ${idArticulo}, ${ticket.cesta.lista[j].unidades}, ${
-        ticket.tipoPago === "CONSUMO_PERSONAL"
+        ticket.cesta.modo === "CONSUMO_PERSONAL"
           ? 0
           : ticket.cesta.lista[j].subtotal
-      }, '${ticket.tipoPago === "CONSUMO_PERSONAL" ? "Desc_100" : "V"}', 0, '${
-        ticket.tipoPago === "CONSUMO_PERSONAL" ? idFinalTrabajador : campoOtros
+      }, '${ticket.cesta.modo === "CONSUMO_PERSONAL" ? "Desc_100" : "V"}', 0, '${
+        ticket.cesta.modo === "CONSUMO_PERSONAL" ? idFinalTrabajador : campoOtros
       }');`;
     }
     sql = `
