@@ -13,14 +13,19 @@ export class TrabajadoresController {
       const token = authInstance.getToken(req);
       const parametros = await authInstance.getParametros(token);
       if (parametros) {
-        return await dependientasInstance.getTrabajadores(parametros.database);
+        return await dependientasInstance.getTrabajadores(parametros.database).then((res)=>{
+          return { error: false, info: res };
+        }).catch((err) => {
+          console.log(err);
+          return { error: true, mensaje: 'SanPedro: dependientas/descargar error catch' };
+        });
       }
       throw Error(
         "Error, autenticación errónea en trabajadores/getTrabajadores"
       );
     } catch (err) {
       console.log(err);
-      return false;
+      return { error: true, mensaje: 'SanPedro: dependientas/descargar faltan todos los datos' };
     }
   }
 }
