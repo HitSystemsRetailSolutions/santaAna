@@ -105,11 +105,11 @@ class CajasClass {
                 IF EXISTS (select * from tocGameInfo where licencia = ${parametros.licencia} AND codigoInternoTienda = ${parametros.codigoInternoTienda})
                     BEGIN
                         SELECT @ultimaCajaV4 = ultimaCajaV4 FROM tocGameInfo WHERE licencia = ${parametros.licencia} AND codigoInternoTienda = ${parametros.codigoInternoTienda}
-                        IF ('${infoCaja._id}' > @ultimaCajaV4)
+                        IF ('${infoCaja.finalTime}' > @ultimaCajaV4 or @ultimaCajaV4 is null)
                             BEGIN
                                 IF NOT EXISTS (select * from [${parametros.database}].[dbo].${nombreTabla} where botiga = ${parametros.codigoInternoTienda} AND Data = CONVERT(datetime, '${fechaInicio.year}-${fechaInicio.month}-${fechaInicio.day} ${fechaInicio.hours}:${fechaInicio.minutes}:${fechaInicio.seconds}', 120))
                                     BEGIN
-                                        UPDATE tocGameInfo SET ultimaCajaV4 = '${infoCaja._id}' WHERE licencia = ${parametros.licencia} AND codigoInternoTienda = ${parametros.codigoInternoTienda} 
+                                        UPDATE tocGameInfo SET ultimaCajaV4 = '${infoCaja.finalTime}' WHERE licencia = ${parametros.licencia} AND codigoInternoTienda = ${parametros.codigoInternoTienda} 
                                         SELECT 'OK' as resultado
                                     END
                                 ELSE
