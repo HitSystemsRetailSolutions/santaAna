@@ -27,6 +27,26 @@ export class TraduccionesController {
       };
     }
   }
+
+  @Get("getIdioma")
+  async getIdioma(@Req() req: Request) {
+    try {
+      const parametros = await authInstance.getParametros(authInstance.getToken(req));
+      if(!parametros)
+        return {
+          error: true,
+          msg: 'Autenticación incorrecta'
+        };
+
+      return await traduccionesInstance.getIdioma(parametros);
+    } catch (err) {
+      logger.Error('traducciones/getIdioma()', err);
+      return {
+        error: true,
+        msg: 'Error general'
+      };
+    }
+  }
   @Post("setTraduccionesKeys")
   async setTraduccionesKeys(@Body() traducciones, @Req() req: Request) {
     try {

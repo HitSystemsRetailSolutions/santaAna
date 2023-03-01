@@ -5,7 +5,7 @@ export class TraduccionesClass {
     async getTraducciones() {
         const res = await recHit('hit', 'SELECT * FROM traducciones');
         if (!res || !res.recordset || !res.recordset.length) return [];
-    
+        
         let { recordset: data } = res;
 
         return Object.values(data.reduce((acc, item) => {
@@ -22,7 +22,19 @@ export class TraduccionesClass {
             return acc;
         }, {}));
     }
+    async getIdioma(parametrosTienda: any){
+        const sqlRepeticion =  `select valor as idioma from ConstantsClient 
+            where codi=${parametrosTienda.codigoInternoTienda} and Variable='IDIOMA'`;
 
+        let resSqlRepeticion = null;
+
+        resSqlRepeticion = await recHit('Fac_tena', sqlRepeticion);
+
+        if (resSqlRepeticion.recordset.length == 1) {
+            return resSqlRepeticion.recordset[0].idioma;
+        }
+        return null;
+    }
     async setTraduccionesKeys(traducciones: any) {
         let data = {
             error: false,
