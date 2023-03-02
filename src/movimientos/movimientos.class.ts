@@ -87,7 +87,7 @@ class Movimientos {
           error = true;
           break;
       }
-      console.log(concepto);
+
       if (!error) {
         if (movimiento.codigoBarras != "" && movimiento.codigoBarras) {
           sqlBarras = `INSERT INTO CodisBarresReferencies (Num, Tipus, Estat, Data, TmSt, Param1, Param2, Param3, Param4) VALUES (${
