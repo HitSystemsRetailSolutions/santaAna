@@ -81,12 +81,13 @@ class Movimientos {
         case "DATAFONO_3G":
         case "SALIDA":
         case "DEUDA":
+          concepto = `Deute client: ${movimiento.idTicket}`;
           break;
         default:
           error = true;
           break;
       }
-
+      console.log(concepto);
       if (!error) {
         if (movimiento.codigoBarras != "" && movimiento.codigoBarras) {
           sqlBarras = `INSERT INTO CodisBarresReferencies (Num, Tipus, Estat, Data, TmSt, Param1, Param2, Param3, Param4) VALUES (${
