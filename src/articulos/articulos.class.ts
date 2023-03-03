@@ -26,9 +26,9 @@ export class ArticulosClass {
             const objIndex = data.findIndex((j) => j._id === id);
             data[objIndex].suplementos = supsId;
           }
-        }
-        return data;
+        }     
       }
+      return data;
     }
     return [];
   }
