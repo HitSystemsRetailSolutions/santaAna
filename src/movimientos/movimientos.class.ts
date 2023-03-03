@@ -81,6 +81,7 @@ class Movimientos {
         case "DATAFONO_3G":
         case "SALIDA":
         case "DEUDA":
+          concepto = `Deute client: ${movimiento.idTicket}`;
           break;
         default:
           error = true;
