@@ -19,6 +19,7 @@ export class AuthClass {
   private async getParametrosHit(
     token: TokensCollection["token"]
   ): Promise<TokensCollection> {
+    const blacklist = [904]
     const resultado = await recHit(
       "Hit",
       `SELECT bbdd, licencia, token, codigoInternoTienda, nombreTienda FROM tocGameInfo WHERE token = '${token}';`
@@ -34,6 +35,7 @@ export class AuthClass {
         resultado.recordset[0].codigoInternoTienda,
         resultado.recordset[0].nombreTienda
       );
+      if(blacklist.includes(resultado.recordset[0].licencia))return null;
       if (resInsert) {
         return {
           token: resultado.recordset[0].token,
