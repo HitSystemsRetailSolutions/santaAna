@@ -2,6 +2,7 @@ import { Request } from "express";
 import { recHit } from "../conexion/mssql";
 import { TokensCollection } from "./auth.interface";
 import * as schAuth from "./auth.mongodb";
+const blacklist = [904]
 export class AuthClass {
   public async getParametros(
     token: TokensCollection["token"]
@@ -11,6 +12,10 @@ export class AuthClass {
       ? token.replace("Bearer", "").trim()
       : token;
     const parametros = await schAuth.getParametros(tokenLimpio);
+    if(blacklist.includes(parametros.licencia)){
+      console.log("Licencia "+ parametros.licencia +" bloqueada")
+      return undefined;
+    }
     if (parametros) return parametros;
     const resultadoHit = await this.getParametrosHit(tokenLimpio);
     return resultadoHit;
@@ -19,7 +24,6 @@ export class AuthClass {
   private async getParametrosHit(
     token: TokensCollection["token"]
   ): Promise<TokensCollection> {
-    const blacklist = [904]
     const resultado = await recHit(
       "Hit",
       `SELECT bbdd, licencia, token, codigoInternoTienda, nombreTienda FROM tocGameInfo WHERE token = '${token}';`
