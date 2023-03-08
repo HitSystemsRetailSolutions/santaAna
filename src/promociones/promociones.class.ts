@@ -4,7 +4,7 @@ export class PromocionesClass {
   /* Eze 4.0 */
   private async getPromocionesUgly(database: string, codigoCliente: number) {
     let Sql =""
-    Sql = "IF not EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES  WHERE TABLE_TYPE='BASE TABLE'  AND '[' + TABLE_NAME + ']' = 'ProductesPromocionats') begin  "
+    Sql = "IF not EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES  WHERE TABLE_TYPE='BASE TABLE'  AND TABLE_NAME = 'ProductesPromocionats') begin  "
     Sql += "CREATE TABLE [dbo].ProductesPromocionats( "
     Sql += " [Id] [nvarchar](50) NULL,"
     Sql += " [Di] [datetime] NULL,"
