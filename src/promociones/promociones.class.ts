@@ -12,7 +12,7 @@ export class PromocionesClass {
     Sql += "[D_Producte] [nvarchar](250) NULL, [D_Quantitat] [float] NULL, [S_Producte] [nvarchar](250) NULL, [S_Quantitat] [float] NULL,[S_Preu] [float] NULL,[Client] [nvarchar](50) NULL"
     Sql += ") ON [PRIMARY] "
     Sql += "end "
-    const res = await recHit(database, Sql);
+    await recHit(database, Sql);
     const sql = `SELECT Id as _id, Di as fechaInicio, Df as fechaFinal, D_Producte as principal, D_Quantitat as cantidadPrincipal, S_Producte as secundario, S_Quantitat as cantidadSecundario, S_Preu as precioFinal FROM ProductesPromocionats WHERE Client = ${codigoCliente}`;
     const res = await recHit(database, sql);
 
