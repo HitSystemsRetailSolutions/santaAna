@@ -77,9 +77,13 @@ class Movimientos {
           concepto = `Pagat TkRs:  [${movimiento.idTicket}]`;
           break;
         case "ENTREGA_DIARIA":
+          break;
         case "ENTRADA_DINERO":
+          break;
         case "DATAFONO_3G":
+          break;
         case "SALIDA":
+          break;
         case "DEUDA":
           concepto = `Deute client: ${movimiento.idTicket}`;
           break;
