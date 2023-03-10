@@ -4,12 +4,12 @@ export class PromocionesClass {
   /* Eze 4.0 */
   private async getPromocionesUgly(database: string, codigoCliente: number) {
     let Sql =""
-    Sql = "IF not EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES  WHERE TABLE_TYPE='BASE TABLE'  AND '[' + TABLE_NAME + ']' = 'ProductesPromocionats') begin  "
+    Sql = "IF not EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES  WHERE TABLE_TYPE='BASE TABLE'  AND TABLE_NAME = 'ProductesPromocionats') begin  "
     Sql += "CREATE TABLE [dbo].ProductesPromocionats( "
-    Sql += "[Id] [nvarchar](50) NULL,"
-    Sql += "[Di] [datetime] NULL,"
-    Sql += "[Df] [datetime] NULL, "
-    Sql += "[D_Producte] [nvarchar](250) NULL, [D_Quantitat] [float] NULL, [S_Producte] [nvarchar](250) NULL, [S_Quantitat] [float] NULL,[S_Preu] [float] NULL,[Client] [nvarchar](50) NULL"
+    Sql += " [Id] [nvarchar](50) NULL,"
+    Sql += " [Di] [datetime] NULL,"
+    Sql += " [Df] [datetime] NULL, "
+    Sql += "[D_Producte] [nvarchar](250) NULL, [D_Quantitat] [float] NULL, [S_Producte] [nvarchar](250) NULL, [S_Quantitat] [float] NULL, [S_Preu] [float] NULL, [Client] [nvarchar](50) NULL"
     Sql += ") ON [PRIMARY] "
     Sql += "end "
     await recHit(database, Sql);
