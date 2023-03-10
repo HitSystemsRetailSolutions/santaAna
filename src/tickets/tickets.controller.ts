@@ -9,7 +9,7 @@ import { SuperTicketInterface } from "./tickets.interface";
 export class TicketsController {
   @Post("enviarTicket")
   async enviarTicket(
-    @Body() { ticket }: { ticket: SuperTicketInterface },
+    @Body() ticket ,
     @Req() req: Request
   ) {
     try {
@@ -17,7 +17,7 @@ export class TicketsController {
       const parametros = await authInstance.getParametros(token);
 
       if (parametros)
-        return await ticketsInstance.insertarTicketsNueva(ticket, parametros);
+        return await ticketsInstance.insertarTicketsNueva(ticket.superTicket, parametros);
 
       throw Error("Error en la autenticación de tickets/enviarTicket");
     } catch (err) {

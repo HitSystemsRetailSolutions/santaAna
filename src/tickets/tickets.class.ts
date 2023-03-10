@@ -7,7 +7,7 @@ class TicketsClass {
   construirCampoOtros(ticket: SuperTicketInterface) {
     let campoOtros = "";
 
-    if (ticket.tipoPago == "TARJETA") campoOtros = "[Visa]";
+    if (ticket.tipoPago == "TARJETA") campoOtros = "[I][C:-"+ticket.total+"][Visa]";
 
     if (ticket.tipoPago == "TKRS")
       campoOtros += `[TkRs:${
@@ -36,7 +36,7 @@ class TicketsClass {
 
   /* Eze 4.0 preparando */
   async insertarTicketsNueva(
-    ticket: SuperTicketInterface,
+    ticket : SuperTicketInterface,
     parametros: TokensCollection
   ) {
     let sql = "";
