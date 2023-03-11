@@ -2,7 +2,7 @@ import { Request } from "express";
 import { recHit } from "../conexion/mssql";
 import { TokensCollection } from "./auth.interface";
 import * as schAuth from "./auth.mongodb";
-const blacklist = [904]
+const blacklist = [893]
 export class AuthClass {
   public async getParametros(
     token: TokensCollection["token"]
